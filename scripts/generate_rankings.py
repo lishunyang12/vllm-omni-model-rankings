@@ -41,25 +41,27 @@ def get_model_ids() -> list[str]:
 
 
 def fetch(m: str) -> dict:
-    url = f"https://huggingface.co/api/models/{m}?expand[]=downloads&expand[]=downloadsAllTime&expand[]=likes&expand[]=pipeline_tag"
+    url = f"https://huggingface.co/api/models/{m}?expand[]=downloads&expand[]=downloadsAllTime&expand[]=likes&expand[]=pipeline_tag&expand[]=createdAt"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "omni-rankings"})
         with urllib.request.urlopen(req, timeout=25) as r:
             d = json.load(r)
+        created = (d.get("createdAt") or "")[:10]  # ISO timestamp -> YYYY-MM-DD
         return {
             "id": m,
             "downloads_30d": d.get("downloads"),
             "downloads_all": d.get("downloadsAllTime"),
             "likes": d.get("likes"),
             "pipeline_tag": d.get("pipeline_tag"),
+            "created": created or None,
             "status": "ok",
         }
     except urllib.error.HTTPError as e:
         return {"id": m, "downloads_30d": None, "downloads_all": None, "likes": None,
-                "pipeline_tag": None, "status": ("gated" if e.code == 401 else f"http_{e.code}")}
+                "pipeline_tag": None, "created": None, "status": ("gated" if e.code == 401 else f"http_{e.code}")}
     except Exception as e:  # noqa: BLE001
         return {"id": m, "downloads_30d": None, "downloads_all": None, "likes": None,
-                "pipeline_tag": None, "status": type(e).__name__}
+                "pipeline_tag": None, "created": None, "status": type(e).__name__}
 
 
 def collect() -> list[dict]:
@@ -85,11 +87,13 @@ def render_html(rows: list[dict], generated: str) -> str:
         medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(i, "")
         tag = html.escape(r["pipeline_tag"] or "")
         note = "" if r["status"] == "ok" else f' <span class="badge">{html.escape(r["status"])}</span>'
+        created = r.get("created") or ""
         trs.append(
             f'<tr>'
             f'<td class="rank">{medal or i}</td>'
             f'<td class="model"><a href="https://huggingface.co/{mid}" target="_blank" rel="noopener">{mid}</a>{note}</td>'
             f'<td class="tag">{tag}</td>'
+            f'<td class="date" data-v="{created}">{created or "&mdash;"}</td>'
             f'<td class="num" data-v="{r["downloads_30d"] or 0}">{cell(r["downloads_30d"])}</td>'
             f'<td class="num" data-v="{r["downloads_all"] or 0}">{cell(r["downloads_all"])}</td>'
             f'<td class="num" data-v="{r["likes"] or 0}">{cell(r["likes"])}</td>'
@@ -131,6 +135,7 @@ def render_html(rows: list[dict], generated: str) -> str:
   td.model a {{ color:var(--accent); text-decoration:none; }}
   td.model a:hover {{ text-decoration:underline; }}
   td.tag {{ color:var(--muted); font-size:12px; }}
+  td.date {{ color:var(--muted); font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; }}
   .badge {{ font-size:11px; color:#f0883e; border:1px solid #f0883e55; border-radius:6px; padding:0 5px; }}
   footer {{ margin-top:24px; color:var(--muted); font-size:12px; }}
 </style>
@@ -152,6 +157,7 @@ def render_html(rows: list[dict], generated: str) -> str:
       <th class="rank">#</th>
       <th data-key="model">Model</th>
       <th data-key="tag">Task</th>
+      <th data-key="date">Released</th>
       <th class="num" data-key="num">30-day</th>
       <th class="num" data-key="num" data-sorted="desc">All-time</th>
       <th class="num" data-key="num">Likes</th>

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-01 18:01 UTC",
+  "generated": "2026-07-01 18:15 UTC",
   "source": "https://raw.githubusercontent.com/vllm-project/vllm-omni/main/docs/models/supported_models.md",
   "models": [
     {
@@ -8,6 +8,7 @@
       "downloads_all": 117823745,
       "likes": 7874,
       "pipeline_tag": "text-to-image",
+      "created": "2023-07-25",
       "status": "ok"
     },
     {
@@ -16,6 +17,7 @@
       "downloads_all": 31775787,
       "likes": 13435,
       "pipeline_tag": "text-to-image",
+      "created": "2024-07-31",
       "status": "ok"
     },
     {
@@ -24,6 +26,7 @@
       "downloads_all": 21578855,
       "likes": 5252,
       "pipeline_tag": "text-to-image",
+      "created": "2024-07-31",
       "status": "ok"
     },
     {
@@ -32,14 +35,16 @@
       "downloads_all": 9767364,
       "likes": 434,
       "pipeline_tag": null,
+      "created": "2026-01-21",
       "status": "ok"
     },
     {
       "id": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
       "downloads_30d": 2021549,
       "downloads_all": 8167319,
-      "likes": 1655,
+      "likes": 1656,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-01-21",
       "status": "ok"
     },
     {
@@ -48,6 +53,7 @@
       "downloads_all": 7509329,
       "likes": 1754,
       "pipeline_tag": "image-to-video",
+      "created": "2026-01-03",
       "status": "ok"
     },
     {
@@ -56,6 +62,7 @@
       "downloads_all": 6980061,
       "likes": 336,
       "pipeline_tag": "any-to-any",
+      "created": "2025-04-30",
       "status": "ok"
     },
     {
@@ -64,6 +71,7 @@
       "downloads_all": 6946510,
       "likes": 953,
       "pipeline_tag": "any-to-any",
+      "created": "2025-09-20",
       "status": "ok"
     },
     {
@@ -72,6 +80,7 @@
       "downloads_all": 6420358,
       "likes": 4907,
       "pipeline_tag": "text-to-image",
+      "created": "2025-11-25",
       "status": "ok"
     },
     {
@@ -80,6 +89,7 @@
       "downloads_all": 5655432,
       "likes": 1100,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-03-30",
       "status": "ok"
     },
     {
@@ -88,6 +98,7 @@
       "downloads_all": 5170379,
       "likes": 1913,
       "pipeline_tag": "any-to-any",
+      "created": "2025-03-22",
       "status": "ok"
     },
     {
@@ -96,6 +107,7 @@
       "downloads_all": 4568602,
       "likes": 999,
       "pipeline_tag": "text-to-image",
+      "created": "2024-10-29",
       "status": "ok"
     },
     {
@@ -104,6 +116,7 @@
       "downloads_all": 3416448,
       "likes": 685,
       "pipeline_tag": "text-to-speech",
+      "created": "2025-07-01",
       "status": "ok"
     },
     {
@@ -112,6 +125,7 @@
       "downloads_all": 3082025,
       "likes": 365,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-01-21",
       "status": "ok"
     },
     {
@@ -120,6 +134,7 @@
       "downloads_all": 2957952,
       "likes": 1186,
       "pipeline_tag": "image-to-image",
+      "created": "2025-09-22",
       "status": "ok"
     },
     {
@@ -128,6 +143,7 @@
       "downloads_all": 2833610,
       "likes": 2686,
       "pipeline_tag": "image-to-image",
+      "created": "2025-05-28",
       "status": "ok"
     },
     {
@@ -136,6 +152,7 @@
       "downloads_all": 2445233,
       "likes": 1094,
       "pipeline_tag": "text-to-image",
+      "created": "2025-09-25",
       "status": "ok"
     },
     {
@@ -144,6 +161,7 @@
       "downloads_all": 2388599,
       "likes": 1860,
       "pipeline_tag": "image-to-image",
+      "created": "2025-11-22",
       "status": "ok"
     },
     {
@@ -152,6 +170,7 @@
       "downloads_all": 2258226,
       "likes": 2526,
       "pipeline_tag": "text-to-image",
+      "created": "2025-08-02",
       "status": "ok"
     },
     {
@@ -160,6 +179,7 @@
       "downloads_all": 2044143,
       "likes": 127,
       "pipeline_tag": "text-to-video",
+      "created": "2025-03-01",
       "status": "ok"
     },
     {
@@ -168,6 +188,7 @@
       "downloads_all": 1677443,
       "likes": 771,
       "pipeline_tag": "image-to-image",
+      "created": "2026-01-14",
       "status": "ok"
     },
     {
@@ -176,6 +197,7 @@
       "downloads_all": 1564419,
       "likes": 140,
       "pipeline_tag": "text-to-video",
+      "created": "2025-07-28",
       "status": "ok"
     },
     {
@@ -184,6 +206,7 @@
       "downloads_all": 1377680,
       "likes": 270,
       "pipeline_tag": "image-to-video",
+      "created": "2025-07-28",
       "status": "ok"
     },
     {
@@ -192,6 +215,7 @@
       "downloads_all": 1221797,
       "likes": 997,
       "pipeline_tag": "text-to-image",
+      "created": "2025-04-06",
       "status": "ok"
     },
     {
@@ -200,6 +224,7 @@
       "downloads_all": 1163535,
       "likes": 2442,
       "pipeline_tag": "image-to-image",
+      "created": "2025-08-17",
       "status": "ok"
     },
     {
@@ -208,6 +233,7 @@
       "downloads_all": 1095153,
       "likes": 1089,
       "pipeline_tag": "image-to-image",
+      "created": "2025-12-17",
       "status": "ok"
     },
     {
@@ -216,6 +242,7 @@
       "downloads_all": 999487,
       "likes": 1453,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-04-03",
       "status": "ok"
     },
     {
@@ -224,6 +251,7 @@
       "downloads_all": 825162,
       "likes": 1514,
       "pipeline_tag": "text-to-audio",
+      "created": "2024-05-24",
       "status": "ok"
     },
     {
@@ -232,6 +260,7 @@
       "downloads_all": 773957,
       "likes": 1409,
       "pipeline_tag": "any-to-any",
+      "created": "2026-02-03",
       "status": "ok"
     },
     {
@@ -240,6 +269,7 @@
       "downloads_all": 745872,
       "likes": 992,
       "pipeline_tag": "image-to-image",
+      "created": "2026-01-14",
       "status": "ok"
     },
     {
@@ -248,6 +278,7 @@
       "downloads_all": 710703,
       "likes": 1065,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-03-09",
       "status": "ok"
     },
     {
@@ -256,6 +287,7 @@
       "downloads_all": 671276,
       "likes": 145,
       "pipeline_tag": "text-to-video",
+      "created": "2025-07-28",
       "status": "ok"
     },
     {
@@ -264,6 +296,7 @@
       "downloads_all": 632668,
       "likes": 52,
       "pipeline_tag": "text-to-video",
+      "created": "2025-03-01",
       "status": "ok"
     },
     {
@@ -272,6 +305,7 @@
       "downloads_all": 575248,
       "likes": 895,
       "pipeline_tag": "text-to-image",
+      "created": "2025-12-30",
       "status": "ok"
     },
     {
@@ -280,6 +314,7 @@
       "downloads_all": 498183,
       "likes": 577,
       "pipeline_tag": "text-to-speech",
+      "created": "2025-12-11",
       "status": "ok"
     },
     {
@@ -288,6 +323,7 @@
       "downloads_all": 329457,
       "likes": 225,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-04-02",
       "status": "ok"
     },
     {
@@ -296,6 +332,7 @@
       "downloads_all": 300249,
       "likes": 183,
       "pipeline_tag": "image-to-image",
+      "created": "2025-12-05",
       "status": "ok"
     },
     {
@@ -304,6 +341,7 @@
       "downloads_all": 237089,
       "likes": 446,
       "pipeline_tag": "any-to-any",
+      "created": "2025-06-06",
       "status": "ok"
     },
     {
@@ -312,6 +350,7 @@
       "downloads_all": 236574,
       "likes": 1114,
       "pipeline_tag": "image-text-to-image",
+      "created": "2025-12-17",
       "status": "ok"
     },
     {
@@ -320,6 +359,7 @@
       "downloads_all": 226727,
       "likes": 247,
       "pipeline_tag": "text-to-image",
+      "created": "2025-12-04",
       "status": "ok"
     },
     {
@@ -328,6 +368,7 @@
       "downloads_all": 192537,
       "likes": 743,
       "pipeline_tag": "text-to-speech",
+      "created": "2025-06-18",
       "status": "ok"
     },
     {
@@ -336,6 +377,7 @@
       "downloads_all": 184127,
       "likes": 159,
       "pipeline_tag": "any-to-any",
+      "created": "2025-09-18",
       "status": "ok"
     },
     {
@@ -344,6 +386,7 @@
       "downloads_all": 176046,
       "likes": 89,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-02-09",
       "status": "ok"
     },
     {
@@ -352,6 +395,7 @@
       "downloads_all": 173900,
       "likes": 275,
       "pipeline_tag": null,
+      "created": "2026-03-10",
       "status": "ok"
     },
     {
@@ -360,6 +404,7 @@
       "downloads_all": 114912,
       "likes": 1000,
       "pipeline_tag": "image-to-image",
+      "created": "2025-09-25",
       "status": "ok"
     },
     {
@@ -368,6 +413,7 @@
       "downloads_all": 109741,
       "likes": 660,
       "pipeline_tag": "text-to-image",
+      "created": "2026-04-07",
       "status": "ok"
     },
     {
@@ -376,6 +422,7 @@
       "downloads_all": 105169,
       "likes": 444,
       "pipeline_tag": "image-to-video",
+      "created": "2025-08-25",
       "status": "ok"
     },
     {
@@ -384,6 +431,7 @@
       "downloads_all": 103283,
       "likes": 867,
       "pipeline_tag": "text-to-speech",
+      "created": "2025-11-17",
       "status": "ok"
     },
     {
@@ -392,6 +440,7 @@
       "downloads_all": 99978,
       "likes": 61,
       "pipeline_tag": "robotics",
+      "created": "2026-02-25",
       "status": "ok"
     },
     {
@@ -400,6 +449,7 @@
       "downloads_all": 98483,
       "likes": 564,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-06-04",
       "status": "ok"
     },
     {
@@ -408,6 +458,7 @@
       "downloads_all": 98239,
       "likes": 34,
       "pipeline_tag": "image-to-video",
+      "created": "2025-06-04",
       "status": "ok"
     },
     {
@@ -416,6 +467,7 @@
       "downloads_all": 87243,
       "likes": 1085,
       "pipeline_tag": "text-to-image",
+      "created": "2026-01-08",
       "status": "ok"
     },
     {
@@ -424,6 +476,7 @@
       "downloads_all": 86592,
       "likes": 188,
       "pipeline_tag": null,
+      "created": "2026-03-10",
       "status": "ok"
     },
     {
@@ -432,6 +485,7 @@
       "downloads_all": 84029,
       "likes": 30,
       "pipeline_tag": "image-to-video",
+      "created": "2025-06-04",
       "status": "ok"
     },
     {
@@ -440,6 +494,7 @@
       "downloads_all": 73592,
       "likes": 287,
       "pipeline_tag": "any-to-any",
+      "created": "2026-04-22",
       "status": "ok"
     },
     {
@@ -448,6 +503,7 @@
       "downloads_all": 47209,
       "likes": 38,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-02-11",
       "status": "ok"
     },
     {
@@ -456,6 +512,7 @@
       "downloads_all": 40923,
       "likes": 44,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-02-08",
       "status": "ok"
     },
     {
@@ -464,6 +521,7 @@
       "downloads_all": 38894,
       "likes": 1207,
       "pipeline_tag": "any-to-any",
+      "created": "2025-05-19",
       "status": "ok"
     },
     {
@@ -472,6 +530,7 @@
       "downloads_all": 32584,
       "likes": 19,
       "pipeline_tag": "any-to-any",
+      "created": "2026-02-21",
       "status": "ok"
     },
     {
@@ -480,6 +539,7 @@
       "downloads_all": 27877,
       "likes": 1,
       "pipeline_tag": "text-to-video",
+      "created": "2025-11-27",
       "status": "ok"
     },
     {
@@ -488,6 +548,7 @@
       "downloads_all": 27267,
       "likes": 399,
       "pipeline_tag": "text-to-image",
+      "created": "2026-04-02",
       "status": "ok"
     },
     {
@@ -496,6 +557,7 @@
       "downloads_all": 27241,
       "likes": 28,
       "pipeline_tag": "text-to-image",
+      "created": "2025-12-23",
       "status": "ok"
     },
     {
@@ -504,6 +566,7 @@
       "downloads_all": 24105,
       "likes": 98,
       "pipeline_tag": "audio-to-audio",
+      "created": "2026-03-16",
       "status": "ok"
     },
     {
@@ -512,6 +575,7 @@
       "downloads_all": 20215,
       "likes": 1,
       "pipeline_tag": "image-to-video",
+      "created": "2026-01-11",
       "status": "ok"
     },
     {
@@ -520,6 +584,7 @@
       "downloads_all": 19136,
       "likes": 49,
       "pipeline_tag": "text-to-video",
+      "created": "2026-02-23",
       "status": "ok"
     },
     {
@@ -528,6 +593,7 @@
       "downloads_all": 12835,
       "likes": 6,
       "pipeline_tag": null,
+      "created": "2026-03-10",
       "status": "ok"
     },
     {
@@ -536,6 +602,7 @@
       "downloads_all": 8785,
       "likes": 0,
       "pipeline_tag": "text-to-video",
+      "created": "2025-11-27",
       "status": "ok"
     },
     {
@@ -544,6 +611,7 @@
       "downloads_all": 8533,
       "likes": 34,
       "pipeline_tag": "text-to-video",
+      "created": "2026-02-23",
       "status": "ok"
     },
     {
@@ -552,6 +620,7 @@
       "downloads_all": 7293,
       "likes": 0,
       "pipeline_tag": "image-to-video",
+      "created": "2025-11-29",
       "status": "ok"
     },
     {
@@ -560,6 +629,7 @@
       "downloads_all": 5867,
       "likes": 30,
       "pipeline_tag": "robotics",
+      "created": "2026-02-04",
       "status": "ok"
     },
     {
@@ -568,6 +638,7 @@
       "downloads_all": 5618,
       "likes": 0,
       "pipeline_tag": "any-to-any",
+      "created": "2026-03-10",
       "status": "ok"
     },
     {
@@ -576,6 +647,7 @@
       "downloads_all": 5454,
       "likes": 101,
       "pipeline_tag": "automatic-speech-recognition",
+      "created": "2026-04-23",
       "status": "ok"
     },
     {
@@ -584,6 +656,7 @@
       "downloads_all": 5075,
       "likes": 342,
       "pipeline_tag": "text-to-speech",
+      "created": "2025-12-10",
       "status": "ok"
     },
     {
@@ -592,6 +665,7 @@
       "downloads_all": 4314,
       "likes": 162,
       "pipeline_tag": "text-to-speech",
+      "created": "2026-02-06",
       "status": "ok"
     },
     {
@@ -600,6 +674,7 @@
       "downloads_all": 4042,
       "likes": 1049,
       "pipeline_tag": "any-to-any",
+      "created": "2026-05-15",
       "status": "ok"
     },
     {
@@ -608,6 +683,7 @@
       "downloads_all": 3760,
       "likes": 1,
       "pipeline_tag": "image-to-video",
+      "created": "2025-11-29",
       "status": "ok"
     },
     {
@@ -616,6 +692,7 @@
       "downloads_all": 3457,
       "likes": 20,
       "pipeline_tag": null,
+      "created": "2025-09-30",
       "status": "ok"
     },
     {
@@ -624,6 +701,7 @@
       "downloads_all": 3073,
       "likes": 10,
       "pipeline_tag": "text-to-video",
+      "created": "2026-02-23",
       "status": "ok"
     },
     {
@@ -632,6 +710,7 @@
       "downloads_all": 1188,
       "likes": 40,
       "pipeline_tag": "robotics",
+      "created": "2026-01-05",
       "status": "ok"
     },
     {
@@ -640,6 +719,7 @@
       "downloads_all": 338,
       "likes": 0,
       "pipeline_tag": "text-to-audio",
+      "created": "2026-04-06",
       "status": "ok"
     },
     {
@@ -648,6 +728,7 @@
       "downloads_all": 283,
       "likes": 2,
       "pipeline_tag": "image-to-video",
+      "created": "2026-04-03",
       "status": "ok"
     },
     {
@@ -656,6 +737,7 @@
       "downloads_all": 187,
       "likes": 0,
       "pipeline_tag": null,
+      "created": "2026-01-14",
       "status": "ok"
     },
     {
@@ -664,6 +746,7 @@
       "downloads_all": 0,
       "likes": 13,
       "pipeline_tag": null,
+      "created": "2026-03-09",
       "status": "ok"
     },
     {
@@ -672,6 +755,7 @@
       "downloads_all": null,
       "likes": null,
       "pipeline_tag": null,
+      "created": null,
       "status": "gated"
     }
   ]
