@@ -4,7 +4,7 @@ A self-updating static site that ranks the models supported by
 [vLLM-Omni](https://github.com/vllm-project/vllm-omni) by their HuggingFace
 download counts.
 
-**Live page:** `https://lishunyang12.github.io/vllm-omni-model-rankings/`
+**Live page:** `https://lishunyang12.github.io/vllm-omni-rankings/`
 
 ## How it works
 

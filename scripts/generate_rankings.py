@@ -106,7 +106,7 @@ def render_html(rows: list[dict], generated: str) -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>vLLM-Omni Supported Models &mdash; HuggingFace Download Rankings</title>
+<title>vLLM-Omni Rankings &mdash; HuggingFace Downloads</title>
 <style>
   :root {{ --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#30363d; --accent:#4493f8; --card:#161b22; }}
   @media (prefers-color-scheme: light) {{
@@ -142,7 +142,7 @@ def render_html(rows: list[dict], generated: str) -> str:
 </head>
 <body>
 <div class="wrap">
-  <h1>vLLM-Omni Supported Models</h1>
+  <h1>vLLM-Omni Rankings</h1>
   <p class="sub">Ranked by HuggingFace downloads &middot; auto-generated from
     <a href="https://github.com/vllm-project/vllm-omni/blob/main/docs/models/supported_models.md" target="_blank" rel="noopener">supported_models.md</a>
     &middot; updated every 6h</p>
