@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vLLM-Omni Supported Models &mdash; HuggingFace Download Rankings</title>
+<style>
+  :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#30363d; --accent:#4493f8; --card:#161b22; }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#d1d9e0; --accent:#0969da; --card:#f6f8fa; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+         background:var(--bg); color:var(--fg); }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 20px 80px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
+  .sub a { color:var(--accent); }
+  .bar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+  input[type=search] { flex:1; min-width:200px; padding:8px 12px; border:1px solid var(--line);
+        border-radius:8px; background:var(--card); color:var(--fg); font-size:14px; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 12px; font-size:13px; }
+  .stat b { color:var(--accent); }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+  th,td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; }
+  th { position:sticky; top:0; background:var(--bg); cursor:pointer; user-select:none; font-size:13px; color:var(--muted); white-space:nowrap; }
+  th.num, td.num { text-align:right; }
+  th:hover { color:var(--fg); }
+  th[data-sorted]::after { content:" ▲"; }
+  th[data-sorted="desc"]::after { content:" ▼"; }
+  td.rank { color:var(--muted); width:44px; text-align:center; }
+  td.model a { color:var(--accent); text-decoration:none; }
+  td.model a:hover { text-decoration:underline; }
+  td.tag { color:var(--muted); font-size:12px; }
+  .badge { font-size:11px; color:#f0883e; border:1px solid #f0883e55; border-radius:6px; padding:0 5px; }
+  footer { margin-top:24px; color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>vLLM-Omni Supported Models</h1>
+  <p class="sub">Ranked by HuggingFace downloads &middot; auto-generated from
+    <a href="https://github.com/vllm-project/vllm-omni/blob/main/docs/models/supported_models.md" target="_blank" rel="noopener">supported_models.md</a>
+    &middot; updated every 6h</p>
+  <div class="bar">
+    <input id="q" type="search" placeholder="Filter models&hellip;">
+    <span class="stat">83 models</span>
+    <span class="stat">30d: <b>20,354,981</b></span>
+    <span class="stat">all-time: <b>271,826,080</b></span>
+  </div>
+  <table id="t">
+    <thead><tr>
+      <th class="rank">#</th>
+      <th data-key="model">Model</th>
+      <th data-key="tag">Task</th>
+      <th class="num" data-key="num">30-day</th>
+      <th class="num" data-key="num" data-sorted="desc">All-time</th>
+      <th class="num" data-key="num">Likes</th>
+    </tr></thead>
+    <tbody>
+<tr><td class="rank">🥇</td><td class="model"><a href="https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0" target="_blank" rel="noopener">stabilityai/stable-diffusion-xl-base-1.0</a></td><td class="tag">text-to-image</td><td class="num" data-v="1343738">1,343,738</td><td class="num" data-v="117823745">117,823,745</td><td class="num" data-v="7874">7,874</td></tr>
+<tr><td class="rank">🥈</td><td class="model"><a href="https://huggingface.co/black-forest-labs/FLUX.1-dev" target="_blank" rel="noopener">black-forest-labs/FLUX.1-dev</a></td><td class="tag">text-to-image</td><td class="num" data-v="1089153">1,089,153</td><td class="num" data-v="31775787">31,775,787</td><td class="num" data-v="13435">13,435</td></tr>
+<tr><td class="rank">🥉</td><td class="model"><a href="https://huggingface.co/black-forest-labs/FLUX.1-schnell" target="_blank" rel="noopener">black-forest-labs/FLUX.1-schnell</a></td><td class="tag">text-to-image</td><td class="num" data-v="238522">238,522</td><td class="num" data-v="21578855">21,578,855</td><td class="num" data-v="5252">5,252</td></tr>
+<tr><td class="rank">4</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-Base" target="_blank" rel="noopener">Qwen/Qwen3-TTS-12Hz-1.7B-Base</a></td><td class="tag"></td><td class="num" data-v="2078150">2,078,150</td><td class="num" data-v="9767364">9,767,364</td><td class="num" data-v="434">434</td></tr>
+<tr><td class="rank">5</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice" target="_blank" rel="noopener">Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice</a></td><td class="tag">text-to-speech</td><td class="num" data-v="2021549">2,021,549</td><td class="num" data-v="8167319">8,167,319</td><td class="num" data-v="1655">1,655</td></tr>
+<tr><td class="rank">6</td><td class="model"><a href="https://huggingface.co/Lightricks/LTX-2" target="_blank" rel="noopener">Lightricks/LTX-2</a></td><td class="tag">image-to-video</td><td class="num" data-v="493515">493,515</td><td class="num" data-v="7509329">7,509,329</td><td class="num" data-v="1754">1,754</td></tr>
+<tr><td class="rank">7</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen2.5-Omni-3B" target="_blank" rel="noopener">Qwen/Qwen2.5-Omni-3B</a></td><td class="tag">any-to-any</td><td class="num" data-v="1736821">1,736,821</td><td class="num" data-v="6980061">6,980,061</td><td class="num" data-v="336">336</td></tr>
+<tr><td class="rank">8</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct" target="_blank" rel="noopener">Qwen/Qwen3-Omni-30B-A3B-Instruct</a></td><td class="tag">any-to-any</td><td class="num" data-v="1915307">1,915,307</td><td class="num" data-v="6946510">6,946,510</td><td class="num" data-v="953">953</td></tr>
+<tr><td class="rank">9</td><td class="model"><a href="https://huggingface.co/Tongyi-MAI/Z-Image-Turbo" target="_blank" rel="noopener">Tongyi-MAI/Z-Image-Turbo</a></td><td class="tag">text-to-image</td><td class="num" data-v="905410">905,410</td><td class="num" data-v="6420358">6,420,358</td><td class="num" data-v="4907">4,907</td></tr>
+<tr><td class="rank">10</td><td class="model"><a href="https://huggingface.co/k2-fsa/OmniVoice" target="_blank" rel="noopener">k2-fsa/OmniVoice</a></td><td class="tag">text-to-speech</td><td class="num" data-v="940315">940,315</td><td class="num" data-v="5655432">5,655,432</td><td class="num" data-v="1100">1,100</td></tr>
+<tr><td class="rank">11</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen2.5-Omni-7B" target="_blank" rel="noopener">Qwen/Qwen2.5-Omni-7B</a></td><td class="tag">any-to-any</td><td class="num" data-v="647043">647,043</td><td class="num" data-v="5170379">5,170,379</td><td class="num" data-v="1913">1,913</td></tr>
+<tr><td class="rank">12</td><td class="model"><a href="https://huggingface.co/stabilityai/stable-diffusion-3.5-medium" target="_blank" rel="noopener">stabilityai/stable-diffusion-3.5-medium</a></td><td class="tag">text-to-image</td><td class="num" data-v="604436">604,436</td><td class="num" data-v="4568602">4,568,602</td><td class="num" data-v="999">999</td></tr>
+<tr><td class="rank">13</td><td class="model"><a href="https://huggingface.co/bosonai/higgs-audio-v2-generation-3B-base" target="_blank" rel="noopener">bosonai/higgs-audio-v2-generation-3B-base</a></td><td class="tag">text-to-speech</td><td class="num" data-v="156246">156,246</td><td class="num" data-v="3416448">3,416,448</td><td class="num" data-v="685">685</td></tr>
+<tr><td class="rank">14</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign" target="_blank" rel="noopener">Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign</a></td><td class="tag">text-to-speech</td><td class="num" data-v="657928">657,928</td><td class="num" data-v="3082025">3,082,025</td><td class="num" data-v="365">365</td></tr>
+<tr><td class="rank">15</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen-Image-Edit-2509" target="_blank" rel="noopener">Qwen/Qwen-Image-Edit-2509</a></td><td class="tag">image-to-image</td><td class="num" data-v="513861">513,861</td><td class="num" data-v="2957952">2,957,952</td><td class="num" data-v="1186">1,186</td></tr>
+<tr><td class="rank">16</td><td class="model"><a href="https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev" target="_blank" rel="noopener">black-forest-labs/FLUX.1-Kontext-dev</a></td><td class="tag">image-to-image</td><td class="num" data-v="154302">154,302</td><td class="num" data-v="2833610">2,833,610</td><td class="num" data-v="2686">2,686</td></tr>
+<tr><td class="rank">17</td><td class="model"><a href="https://huggingface.co/tencent/HunyuanImage-3.0" target="_blank" rel="noopener">tencent/HunyuanImage-3.0</a></td><td class="tag">text-to-image</td><td class="num" data-v="301347">301,347</td><td class="num" data-v="2445233">2,445,233</td><td class="num" data-v="1094">1,094</td></tr>
+<tr><td class="rank">18</td><td class="model"><a href="https://huggingface.co/black-forest-labs/FLUX.2-dev" target="_blank" rel="noopener">black-forest-labs/FLUX.2-dev</a></td><td class="tag">image-to-image</td><td class="num" data-v="263431">263,431</td><td class="num" data-v="2388599">2,388,599</td><td class="num" data-v="1860">1,860</td></tr>
+<tr><td class="rank">19</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen-Image" target="_blank" rel="noopener">Qwen/Qwen-Image</a></td><td class="tag">text-to-image</td><td class="num" data-v="189766">189,766</td><td class="num" data-v="2258226">2,258,226</td><td class="num" data-v="2526">2,526</td></tr>
+<tr><td class="rank">20</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B-Diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.1-T2V-1.3B-Diffusers</a></td><td class="tag">text-to-video</td><td class="num" data-v="168315">168,315</td><td class="num" data-v="2044143">2,044,143</td><td class="num" data-v="127">127</td></tr>
+<tr><td class="rank">21</td><td class="model"><a href="https://huggingface.co/black-forest-labs/FLUX.2-klein-4B" target="_blank" rel="noopener">black-forest-labs/FLUX.2-klein-4B</a></td><td class="tag">image-to-image</td><td class="num" data-v="470389">470,389</td><td class="num" data-v="1677443">1,677,443</td><td class="num" data-v="771">771</td></tr>
+<tr><td class="rank">22</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.2-T2V-A14B-Diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.2-T2V-A14B-Diffusers</a></td><td class="tag">text-to-video</td><td class="num" data-v="105648">105,648</td><td class="num" data-v="1564419">1,564,419</td><td class="num" data-v="140">140</td></tr>
+<tr><td class="rank">23</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.2-I2V-A14B-Diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.2-I2V-A14B-Diffusers</a></td><td class="tag">image-to-video</td><td class="num" data-v="112934">112,934</td><td class="num" data-v="1377680">1,377,680</td><td class="num" data-v="270">270</td></tr>
+<tr><td class="rank">24</td><td class="model"><a href="https://huggingface.co/HiDream-ai/HiDream-I1-Full" target="_blank" rel="noopener">HiDream-ai/HiDream-I1-Full</a></td><td class="tag">text-to-image</td><td class="num" data-v="6074">6,074</td><td class="num" data-v="1221797">1,221,797</td><td class="num" data-v="997">997</td></tr>
+<tr><td class="rank">25</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen-Image-Edit" target="_blank" rel="noopener">Qwen/Qwen-Image-Edit</a></td><td class="tag">image-to-image</td><td class="num" data-v="70945">70,945</td><td class="num" data-v="1163535">1,163,535</td><td class="num" data-v="2442">2,442</td></tr>
+<tr><td class="rank">26</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen-Image-Edit-2511" target="_blank" rel="noopener">Qwen/Qwen-Image-Edit-2511</a></td><td class="tag">image-to-image</td><td class="num" data-v="160868">160,868</td><td class="num" data-v="1095153">1,095,153</td><td class="num" data-v="1089">1,089</td></tr>
+<tr><td class="rank">27</td><td class="model"><a href="https://huggingface.co/openbmb/VoxCPM2" target="_blank" rel="noopener">openbmb/VoxCPM2</a></td><td class="tag">text-to-speech</td><td class="num" data-v="620018">620,018</td><td class="num" data-v="999487">999,487</td><td class="num" data-v="1453">1,453</td></tr>
+<tr><td class="rank">28</td><td class="model"><a href="https://huggingface.co/stabilityai/stable-audio-open-1.0" target="_blank" rel="noopener">stabilityai/stable-audio-open-1.0</a></td><td class="tag">text-to-audio</td><td class="num" data-v="25871">25,871</td><td class="num" data-v="825162">825,162</td><td class="num" data-v="1514">1,514</td></tr>
+<tr><td class="rank">29</td><td class="model"><a href="https://huggingface.co/openbmb/MiniCPM-o-4_5" target="_blank" rel="noopener">openbmb/MiniCPM-o-4_5</a></td><td class="tag">any-to-any</td><td class="num" data-v="384500">384,500</td><td class="num" data-v="773957">773,957</td><td class="num" data-v="1409">1,409</td></tr>
+<tr><td class="rank">30</td><td class="model"><a href="https://huggingface.co/black-forest-labs/FLUX.2-klein-9B" target="_blank" rel="noopener">black-forest-labs/FLUX.2-klein-9B</a></td><td class="tag">image-to-image</td><td class="num" data-v="190618">190,618</td><td class="num" data-v="745872">745,872</td><td class="num" data-v="992">992</td></tr>
+<tr><td class="rank">31</td><td class="model"><a href="https://huggingface.co/fishaudio/s2-pro" target="_blank" rel="noopener">fishaudio/s2-pro</a></td><td class="tag">text-to-speech</td><td class="num" data-v="427481">427,481</td><td class="num" data-v="710703">710,703</td><td class="num" data-v="1065">1,065</td></tr>
+<tr><td class="rank">32</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B-Diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.2-TI2V-5B-Diffusers</a></td><td class="tag">text-to-video</td><td class="num" data-v="101810">101,810</td><td class="num" data-v="671276">671,276</td><td class="num" data-v="145">145</td></tr>
+<tr><td class="rank">33</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.1-T2V-14B-Diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.1-T2V-14B-Diffusers</a></td><td class="tag">text-to-video</td><td class="num" data-v="55859">55,859</td><td class="num" data-v="632668">632,668</td><td class="num" data-v="52">52</td></tr>
+<tr><td class="rank">34</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen-Image-2512" target="_blank" rel="noopener">Qwen/Qwen-Image-2512</a></td><td class="tag">text-to-image</td><td class="num" data-v="60818">60,818</td><td class="num" data-v="575248">575,248</td><td class="num" data-v="895">895</td></tr>
+<tr><td class="rank">35</td><td class="model"><a href="https://huggingface.co/FunAudioLLM/Fun-CosyVoice3-0.5B-2512" target="_blank" rel="noopener">FunAudioLLM/Fun-CosyVoice3-0.5B-2512</a></td><td class="tag">text-to-speech</td><td class="num" data-v="24069">24,069</td><td class="num" data-v="498183">498,183</td><td class="num" data-v="577">577</td></tr>
+<tr><td class="rank">36</td><td class="model"><a href="https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Nano" target="_blank" rel="noopener">OpenMOSS-Team/MOSS-TTS-Nano</a></td><td class="tag">text-to-speech</td><td class="num" data-v="95194">95,194</td><td class="num" data-v="329457">329,457</td><td class="num" data-v="225">225</td></tr>
+<tr><td class="rank">37</td><td class="model"><a href="https://huggingface.co/meituan-longcat/LongCat-Image-Edit" target="_blank" rel="noopener">meituan-longcat/LongCat-Image-Edit</a></td><td class="tag">image-to-image</td><td class="num" data-v="24761">24,761</td><td class="num" data-v="300249">300,249</td><td class="num" data-v="183">183</td></tr>
+<tr><td class="rank">38</td><td class="model"><a href="https://huggingface.co/OmniGen2/OmniGen2" target="_blank" rel="noopener">OmniGen2/OmniGen2</a></td><td class="tag">any-to-any</td><td class="num" data-v="1808">1,808</td><td class="num" data-v="237089">237,089</td><td class="num" data-v="446">446</td></tr>
+<tr><td class="rank">39</td><td class="model"><a href="https://huggingface.co/Qwen/Qwen-Image-Layered" target="_blank" rel="noopener">Qwen/Qwen-Image-Layered</a></td><td class="tag">image-text-to-image</td><td class="num" data-v="51205">51,205</td><td class="num" data-v="236574">236,574</td><td class="num" data-v="1114">1,114</td></tr>
+<tr><td class="rank">40</td><td class="model"><a href="https://huggingface.co/meituan-longcat/LongCat-Image" target="_blank" rel="noopener">meituan-longcat/LongCat-Image</a></td><td class="tag">text-to-image</td><td class="num" data-v="18634">18,634</td><td class="num" data-v="226727">226,727</td><td class="num" data-v="247">247</td></tr>
+<tr><td class="rank">41</td><td class="model"><a href="https://huggingface.co/IndexTeam/IndexTTS-2" target="_blank" rel="noopener">IndexTeam/IndexTTS-2</a></td><td class="tag">text-to-speech</td><td class="num" data-v="14383">14,383</td><td class="num" data-v="192537">192,537</td><td class="num" data-v="743">743</td></tr>
+<tr><td class="rank">42</td><td class="model"><a href="https://huggingface.co/XiaomiMiMo/MiMo-Audio-7B-Instruct" target="_blank" rel="noopener">XiaomiMiMo/MiMo-Audio-7B-Instruct</a></td><td class="tag">any-to-any</td><td class="num" data-v="17593">17,593</td><td class="num" data-v="184127">184,127</td><td class="num" data-v="159">159</td></tr>
+<tr><td class="rank">43</td><td class="model"><a href="https://huggingface.co/OpenMOSS-Team/MOSS-TTS-Realtime" target="_blank" rel="noopener">OpenMOSS-Team/MOSS-TTS-Realtime</a></td><td class="tag">text-to-speech</td><td class="num" data-v="38000">38,000</td><td class="num" data-v="176046">176,046</td><td class="num" data-v="89">89</td></tr>
+<tr><td class="rank">44</td><td class="model"><a href="https://huggingface.co/nvidia/Cosmos3-Nano" target="_blank" rel="noopener">nvidia/Cosmos3-Nano</a></td><td class="tag"></td><td class="num" data-v="164942">164,942</td><td class="num" data-v="173900">173,900</td><td class="num" data-v="275">275</td></tr>
+<tr><td class="rank">45</td><td class="model"><a href="https://huggingface.co/tencent/HunyuanImage-3.0-Instruct" target="_blank" rel="noopener">tencent/HunyuanImage-3.0-Instruct</a></td><td class="tag">image-to-image</td><td class="num" data-v="61182">61,182</td><td class="num" data-v="114912">114,912</td><td class="num" data-v="1000">1,000</td></tr>
+<tr><td class="rank">46</td><td class="model"><a href="https://huggingface.co/baidu/ERNIE-Image" target="_blank" rel="noopener">baidu/ERNIE-Image</a></td><td class="tag">text-to-image</td><td class="num" data-v="80517">80,517</td><td class="num" data-v="109741">109,741</td><td class="num" data-v="660">660</td></tr>
+<tr><td class="rank">47</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.2-S2V-14B" target="_blank" rel="noopener">Wan-AI/Wan2.2-S2V-14B</a></td><td class="tag">image-to-video</td><td class="num" data-v="22179">22,179</td><td class="num" data-v="105169">105,169</td><td class="num" data-v="444">444</td></tr>
+<tr><td class="rank">48</td><td class="model"><a href="https://huggingface.co/mistralai/Voxtral-4B-TTS-2603" target="_blank" rel="noopener">mistralai/Voxtral-4B-TTS-2603</a></td><td class="tag">text-to-speech</td><td class="num" data-v="85590">85,590</td><td class="num" data-v="103283">103,283</td><td class="num" data-v="867">867</td></tr>
+<tr><td class="rank">49</td><td class="model"><a href="https://huggingface.co/nvidia/GR00T-N1.7-3B" target="_blank" rel="noopener">nvidia/GR00T-N1.7-3B</a></td><td class="tag">robotics</td><td class="num" data-v="44293">44,293</td><td class="num" data-v="99978">99,978</td><td class="num" data-v="61">61</td></tr>
+<tr><td class="rank">50</td><td class="model"><a href="https://huggingface.co/bosonai/higgs-audio-v3-tts-4b" target="_blank" rel="noopener">bosonai/higgs-audio-v3-tts-4b</a></td><td class="tag">text-to-speech</td><td class="num" data-v="98483">98,483</td><td class="num" data-v="98483">98,483</td><td class="num" data-v="564">564</td></tr>
+<tr><td class="rank">51</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.1-VACE-14B-diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.1-VACE-14B-diffusers</a></td><td class="tag">image-to-video</td><td class="num" data-v="41116">41,116</td><td class="num" data-v="98239">98,239</td><td class="num" data-v="34">34</td></tr>
+<tr><td class="rank">52</td><td class="model"><a href="https://huggingface.co/zai-org/GLM-Image" target="_blank" rel="noopener">zai-org/GLM-Image</a></td><td class="tag">text-to-image</td><td class="num" data-v="44175">44,175</td><td class="num" data-v="87243">87,243</td><td class="num" data-v="1085">1,085</td></tr>
+<tr><td class="rank">53</td><td class="model"><a href="https://huggingface.co/nvidia/Cosmos3-Super" target="_blank" rel="noopener">nvidia/Cosmos3-Super</a></td><td class="tag"></td><td class="num" data-v="83753">83,753</td><td class="num" data-v="86592">86,592</td><td class="num" data-v="188">188</td></tr>
+<tr><td class="rank">54</td><td class="model"><a href="https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B-diffusers" target="_blank" rel="noopener">Wan-AI/Wan2.1-VACE-1.3B-diffusers</a></td><td class="tag">image-to-video</td><td class="num" data-v="5208">5,208</td><td class="num" data-v="84029">84,029</td><td class="num" data-v="30">30</td></tr>
+<tr><td class="rank">55</td><td class="model"><a href="https://huggingface.co/SenseNova/SenseNova-U1-8B-MoT" target="_blank" rel="noopener">SenseNova/SenseNova-U1-8B-MoT</a></td><td class="tag">any-to-any</td><td class="num" data-v="42657">42,657</td><td class="num" data-v="73592">73,592</td><td class="num" data-v="287">287</td></tr>
+<tr><td class="rank">56</td><td class="model"><a href="https://huggingface.co/inclusionAI/Ming-omni-tts-0.5B" target="_blank" rel="noopener">inclusionAI/Ming-omni-tts-0.5B</a></td><td class="tag">text-to-speech</td><td class="num" data-v="18482">18,482</td><td class="num" data-v="47209">47,209</td><td class="num" data-v="38">38</td></tr>
+<tr><td class="rank">57</td><td class="model"><a href="https://huggingface.co/OpenMOSS-Team/MOSS-VoiceGenerator" target="_blank" rel="noopener">OpenMOSS-Team/MOSS-VoiceGenerator</a></td><td class="tag">text-to-speech</td><td class="num" data-v="9467">9,467</td><td class="num" data-v="40923">40,923</td><td class="num" data-v="44">44</td></tr>
+<tr><td class="rank">58</td><td class="model"><a href="https://huggingface.co/ByteDance-Seed/BAGEL-7B-MoT" target="_blank" rel="noopener">ByteDance-Seed/BAGEL-7B-MoT</a></td><td class="tag">any-to-any</td><td class="num" data-v="888">888</td><td class="num" data-v="38894">38,894</td><td class="num" data-v="1207">1,207</td></tr>
+<tr><td class="rank">59</td><td class="model"><a href="https://huggingface.co/snu-aidas/Dynin-Omni" target="_blank" rel="noopener">snu-aidas/Dynin-Omni</a></td><td class="tag">any-to-any</td><td class="num" data-v="6450">6,450</td><td class="num" data-v="32584">32,584</td><td class="num" data-v="19">19</td></tr>
+<tr><td class="rank">60</td><td class="model"><a href="https://huggingface.co/hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v" target="_blank" rel="noopener">hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v</a></td><td class="tag">text-to-video</td><td class="num" data-v="1028">1,028</td><td class="num" data-v="27877">27,877</td><td class="num" data-v="1">1</td></tr>
+<tr><td class="rank">61</td><td class="model"><a href="https://huggingface.co/baidu/ERNIE-Image-Turbo" target="_blank" rel="noopener">baidu/ERNIE-Image-Turbo</a></td><td class="tag">text-to-image</td><td class="num" data-v="4628">4,628</td><td class="num" data-v="27267">27,267</td><td class="num" data-v="399">399</td></tr>
+<tr><td class="rank">62</td><td class="model"><a href="https://huggingface.co/stepfun-ai/NextStep-1.1" target="_blank" rel="noopener">stepfun-ai/NextStep-1.1</a></td><td class="tag">text-to-image</td><td class="num" data-v="6210">6,210</td><td class="num" data-v="27241">27,241</td><td class="num" data-v="28">28</td></tr>
+<tr><td class="rank">63</td><td class="model"><a href="https://huggingface.co/tencent/Covo-Audio-Chat" target="_blank" rel="noopener">tencent/Covo-Audio-Chat</a></td><td class="tag">audio-to-audio</td><td class="num" data-v="11511">11,511</td><td class="num" data-v="24105">24,105</td><td class="num" data-v="98">98</td></tr>
+<tr><td class="rank">64</td><td class="model"><a href="https://huggingface.co/rootonchair/LTX-2-19b-distilled" target="_blank" rel="noopener">rootonchair/LTX-2-19b-distilled</a></td><td class="tag">image-to-video</td><td class="num" data-v="759">759</td><td class="num" data-v="20215">20,215</td><td class="num" data-v="1">1</td></tr>
+<tr><td class="rank">65</td><td class="model"><a href="https://huggingface.co/BestWishYsh/Helios-Distilled" target="_blank" rel="noopener">BestWishYsh/Helios-Distilled</a></td><td class="tag">text-to-video</td><td class="num" data-v="1717">1,717</td><td class="num" data-v="19136">19,136</td><td class="num" data-v="49">49</td></tr>
+<tr><td class="rank">66</td><td class="model"><a href="https://huggingface.co/dg845/LTX-2.3-Diffusers" target="_blank" rel="noopener">dg845/LTX-2.3-Diffusers</a></td><td class="tag"></td><td class="num" data-v="3016">3,016</td><td class="num" data-v="12835">12,835</td><td class="num" data-v="6">6</td></tr>
+<tr><td class="rank">67</td><td class="model"><a href="https://huggingface.co/hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_t2v" target="_blank" rel="noopener">hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_t2v</a></td><td class="tag">text-to-video</td><td class="num" data-v="1364">1,364</td><td class="num" data-v="8785">8,785</td><td class="num" data-v="0">0</td></tr>
+<tr><td class="rank">68</td><td class="model"><a href="https://huggingface.co/BestWishYsh/Helios-Base" target="_blank" rel="noopener">BestWishYsh/Helios-Base</a></td><td class="tag">text-to-video</td><td class="num" data-v="2999">2,999</td><td class="num" data-v="8533">8,533</td><td class="num" data-v="34">34</td></tr>
+<tr><td class="rank">69</td><td class="model"><a href="https://huggingface.co/hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_i2v" target="_blank" rel="noopener">hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_i2v</a></td><td class="tag">image-to-video</td><td class="num" data-v="658">658</td><td class="num" data-v="7293">7,293</td><td class="num" data-v="0">0</td></tr>
+<tr><td class="rank">70</td><td class="model"><a href="https://huggingface.co/GEAR-Dreams/DreamZero-DROID" target="_blank" rel="noopener">GEAR-Dreams/DreamZero-DROID</a></td><td class="tag">robotics</td><td class="num" data-v="3069">3,069</td><td class="num" data-v="5867">5,867</td><td class="num" data-v="30">30</td></tr>
+<tr><td class="rank">71</td><td class="model"><a href="https://huggingface.co/Jonathan1909/Ming-flash-omni-2.0" target="_blank" rel="noopener">Jonathan1909/Ming-flash-omni-2.0</a></td><td class="tag">any-to-any</td><td class="num" data-v="2284">2,284</td><td class="num" data-v="5618">5,618</td><td class="num" data-v="0">0</td></tr>
+<tr><td class="rank">72</td><td class="model"><a href="https://huggingface.co/XiaomiMiMo/MiMo-V2.5-ASR" target="_blank" rel="noopener">XiaomiMiMo/MiMo-V2.5-ASR</a></td><td class="tag">automatic-speech-recognition</td><td class="num" data-v="2515">2,515</td><td class="num" data-v="5454">5,454</td><td class="num" data-v="101">101</td></tr>
+<tr><td class="rank">73</td><td class="model"><a href="https://huggingface.co/zai-org/GLM-TTS" target="_blank" rel="noopener">zai-org/GLM-TTS</a></td><td class="tag">text-to-speech</td><td class="num" data-v="225">225</td><td class="num" data-v="5075">5,075</td><td class="num" data-v="342">342</td></tr>
+<tr><td class="rank">74</td><td class="model"><a href="https://huggingface.co/Soul-AILab/SoulX-Singer" target="_blank" rel="noopener">Soul-AILab/SoulX-Singer</a></td><td class="tag">text-to-speech</td><td class="num" data-v="755">755</td><td class="num" data-v="4314">4,314</td><td class="num" data-v="162">162</td></tr>
+<tr><td class="rank">75</td><td class="model"><a href="https://huggingface.co/bytedance-research/Lance" target="_blank" rel="noopener">bytedance-research/Lance</a></td><td class="tag">any-to-any</td><td class="num" data-v="851">851</td><td class="num" data-v="4042">4,042</td><td class="num" data-v="1049">1,049</td></tr>
+<tr><td class="rank">76</td><td class="model"><a href="https://huggingface.co/hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_i2v" target="_blank" rel="noopener">hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_i2v</a></td><td class="tag">image-to-video</td><td class="num" data-v="246">246</td><td class="num" data-v="3760">3,760</td><td class="num" data-v="1">1</td></tr>
+<tr><td class="rank">77</td><td class="model"><a href="https://huggingface.co/bytedance-research/MammothModa2-Preview" target="_blank" rel="noopener">bytedance-research/MammothModa2-Preview</a></td><td class="tag"></td><td class="num" data-v="2457">2,457</td><td class="num" data-v="3457">3,457</td><td class="num" data-v="20">20</td></tr>
+<tr><td class="rank">78</td><td class="model"><a href="https://huggingface.co/BestWishYsh/Helios-Mid" target="_blank" rel="noopener">BestWishYsh/Helios-Mid</a></td><td class="tag">text-to-video</td><td class="num" data-v="132">132</td><td class="num" data-v="3073">3,073</td><td class="num" data-v="10">10</td></tr>
+<tr><td class="rank">79</td><td class="model"><a href="https://huggingface.co/InternRobotics/InternVLA-A1-3B" target="_blank" rel="noopener">InternRobotics/InternVLA-A1-3B</a></td><td class="tag">robotics</td><td class="num" data-v="124">124</td><td class="num" data-v="1188">1,188</td><td class="num" data-v="40">40</td></tr>
+<tr><td class="rank">80</td><td class="model"><a href="https://huggingface.co/zhangj1an/AudioX" target="_blank" rel="noopener">zhangj1an/AudioX</a></td><td class="tag">text-to-audio</td><td class="num" data-v="145">145</td><td class="num" data-v="338">338</td><td class="num" data-v="0">0</td></tr>
+<tr><td class="rank">81</td><td class="model"><a href="https://huggingface.co/SII-GAIR/daVinci-MagiHuman-Base-1080p" target="_blank" rel="noopener">SII-GAIR/daVinci-MagiHuman-Base-1080p</a></td><td class="tag">image-to-video</td><td class="num" data-v="113">113</td><td class="num" data-v="283">283</td><td class="num" data-v="2">2</td></tr>
+<tr><td class="rank">82</td><td class="model"><a href="https://huggingface.co/Pyros13/Wan2.2-VACE-Fun-A14B-Diffusers" target="_blank" rel="noopener">Pyros13/Wan2.2-VACE-Fun-A14B-Diffusers</a></td><td class="tag"></td><td class="num" data-v="158">158</td><td class="num" data-v="187">187</td><td class="num" data-v="0">0</td></tr>
+<tr><td class="rank">83</td><td class="model"><a href="https://huggingface.co/XuGuo699/DreamID-Omni" target="_blank" rel="noopener">XuGuo699/DreamID-Omni</a></td><td class="tag"></td><td class="num" data-v="0">0</td><td class="num" data-v="0">0</td><td class="num" data-v="13">13</td></tr>
+<tr><td class="rank">84</td><td class="model"><a href="https://huggingface.co/OvisAI/Ovis-Image" target="_blank" rel="noopener">OvisAI/Ovis-Image</a> <span class="badge">gated</span></td><td class="tag"></td><td class="num" data-v="0">&mdash;</td><td class="num" data-v="0">&mdash;</td><td class="num" data-v="0">&mdash;</td></tr>
+    </tbody>
+  </table>
+  <footer>
+    Last updated 2026-07-01 17:57 UTC. Data: HuggingFace public API
+    (<code>downloads</code> = last 30 days, <code>downloadsAllTime</code> = cumulative).
+    Some entries are the upstream base weights an integration builds on.
+    Machine-readable: <a href="data.json">data.json</a>.
+  </footer>
+</div>
+<script>
+const tbody = document.querySelector('#t tbody');
+const rows = [...tbody.rows];
+document.querySelectorAll('#t th[data-key]').forEach((th, idx) => {
+  th.addEventListener('click', () => {
+    const col = th.cellIndex;
+    const isNum = th.classList.contains('num');
+    const desc = th.getAttribute('data-sorted') !== 'desc';
+    document.querySelectorAll('#t th').forEach(h => h.removeAttribute('data-sorted'));
+    th.setAttribute('data-sorted', desc ? 'desc' : 'asc');
+    const sorted = rows.slice().sort((a, b) => {
+      let x, y;
+      if (isNum) { x = +a.cells[col].dataset.v; y = +b.cells[col].dataset.v; }
+      else { x = a.cells[col].innerText.toLowerCase(); y = b.cells[col].innerText.toLowerCase(); }
+      return (x < y ? -1 : x > y ? 1 : 0) * (desc ? -1 : 1);
+    });
+    sorted.forEach((r, i) => { r.cells[0].innerText = i + 1 < 4 ? ['🥇','🥈','🥉'][i] : (i + 1); tbody.appendChild(r); });
+  });
+});
+document.querySelector('#q').addEventListener('input', e => {
+  const v = e.target.value.toLowerCase();
+  rows.forEach(r => { r.style.display = r.cells[1].innerText.toLowerCase().includes(v) ? '' : 'none'; });
+});
+</script>
+</body>
+</html>
