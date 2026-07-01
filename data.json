@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-01 18:21 UTC",
+  "generated": "2026-07-01 18:41 UTC",
   "source": "https://raw.githubusercontent.com/vllm-project/vllm-omni/main/docs/models/supported_models.md",
   "models": [
     {
@@ -9,6 +9,7 @@
       "likes": 7874,
       "pipeline_tag": "text-to-image",
       "created": "2023-07-25",
+      "released": "2023-07-25",
       "status": "ok"
     },
     {
@@ -18,6 +19,7 @@
       "likes": 13435,
       "pipeline_tag": "text-to-image",
       "created": "2024-07-31",
+      "released": "2024-07-31",
       "status": "ok"
     },
     {
@@ -27,6 +29,7 @@
       "likes": 5252,
       "pipeline_tag": "text-to-image",
       "created": "2024-07-31",
+      "released": "2024-07-31",
       "status": "ok"
     },
     {
@@ -36,6 +39,7 @@
       "likes": 434,
       "pipeline_tag": null,
       "created": "2026-01-21",
+      "released": "2026-01-21",
       "status": "ok"
     },
     {
@@ -45,6 +49,7 @@
       "likes": 1656,
       "pipeline_tag": "text-to-speech",
       "created": "2026-01-21",
+      "released": "2026-01-21",
       "status": "ok"
     },
     {
@@ -54,6 +59,7 @@
       "likes": 1754,
       "pipeline_tag": "image-to-video",
       "created": "2026-01-03",
+      "released": "2026-01-03",
       "status": "ok"
     },
     {
@@ -63,6 +69,7 @@
       "likes": 336,
       "pipeline_tag": "any-to-any",
       "created": "2025-04-30",
+      "released": "2025-04-30",
       "status": "ok"
     },
     {
@@ -72,6 +79,7 @@
       "likes": 953,
       "pipeline_tag": "any-to-any",
       "created": "2025-09-20",
+      "released": "2025-09-20",
       "status": "ok"
     },
     {
@@ -81,6 +89,7 @@
       "likes": 4907,
       "pipeline_tag": "text-to-image",
       "created": "2025-11-25",
+      "released": "2025-11-25",
       "status": "ok"
     },
     {
@@ -90,6 +99,7 @@
       "likes": 1100,
       "pipeline_tag": "text-to-speech",
       "created": "2026-03-30",
+      "released": "2026-03-30",
       "status": "ok"
     },
     {
@@ -99,6 +109,7 @@
       "likes": 1913,
       "pipeline_tag": "any-to-any",
       "created": "2025-03-22",
+      "released": "2025-03-22",
       "status": "ok"
     },
     {
@@ -108,6 +119,7 @@
       "likes": 999,
       "pipeline_tag": "text-to-image",
       "created": "2024-10-29",
+      "released": "2024-10-29",
       "status": "ok"
     },
     {
@@ -117,6 +129,7 @@
       "likes": 685,
       "pipeline_tag": "text-to-speech",
       "created": "2025-07-01",
+      "released": "2025-07-01",
       "status": "ok"
     },
     {
@@ -126,6 +139,7 @@
       "likes": 365,
       "pipeline_tag": "text-to-speech",
       "created": "2026-01-21",
+      "released": "2026-01-21",
       "status": "ok"
     },
     {
@@ -135,6 +149,7 @@
       "likes": 1186,
       "pipeline_tag": "image-to-image",
       "created": "2025-09-22",
+      "released": "2025-09-22",
       "status": "ok"
     },
     {
@@ -144,6 +159,7 @@
       "likes": 2686,
       "pipeline_tag": "image-to-image",
       "created": "2025-05-28",
+      "released": "2025-05-28",
       "status": "ok"
     },
     {
@@ -153,6 +169,7 @@
       "likes": 1094,
       "pipeline_tag": "text-to-image",
       "created": "2025-09-25",
+      "released": "2025-09-25",
       "status": "ok"
     },
     {
@@ -162,6 +179,7 @@
       "likes": 1860,
       "pipeline_tag": "image-to-image",
       "created": "2025-11-22",
+      "released": "2025-11-22",
       "status": "ok"
     },
     {
@@ -171,6 +189,7 @@
       "likes": 2526,
       "pipeline_tag": "text-to-image",
       "created": "2025-08-02",
+      "released": "2025-08-02",
       "status": "ok"
     },
     {
@@ -180,6 +199,7 @@
       "likes": 127,
       "pipeline_tag": "text-to-video",
       "created": "2025-03-01",
+      "released": "2025-03-01",
       "status": "ok"
     },
     {
@@ -189,6 +209,7 @@
       "likes": 771,
       "pipeline_tag": "image-to-image",
       "created": "2026-01-14",
+      "released": "2026-01-15",
       "status": "ok"
     },
     {
@@ -198,6 +219,7 @@
       "likes": 140,
       "pipeline_tag": "text-to-video",
       "created": "2025-07-28",
+      "released": "2025-07-28",
       "status": "ok"
     },
     {
@@ -207,6 +229,7 @@
       "likes": 270,
       "pipeline_tag": "image-to-video",
       "created": "2025-07-28",
+      "released": "2025-07-28",
       "status": "ok"
     },
     {
@@ -216,6 +239,7 @@
       "likes": 997,
       "pipeline_tag": "text-to-image",
       "created": "2025-04-06",
+      "released": "2025-04-06",
       "status": "ok"
     },
     {
@@ -225,6 +249,7 @@
       "likes": 2442,
       "pipeline_tag": "image-to-image",
       "created": "2025-08-17",
+      "released": "2025-08-17",
       "status": "ok"
     },
     {
@@ -234,6 +259,7 @@
       "likes": 1089,
       "pipeline_tag": "image-to-image",
       "created": "2025-12-17",
+      "released": "2025-12-17",
       "status": "ok"
     },
     {
@@ -243,6 +269,7 @@
       "likes": 1453,
       "pipeline_tag": "text-to-speech",
       "created": "2026-04-03",
+      "released": "2026-04-03",
       "status": "ok"
     },
     {
@@ -252,6 +279,7 @@
       "likes": 1514,
       "pipeline_tag": "text-to-audio",
       "created": "2024-05-24",
+      "released": "2024-05-24",
       "status": "ok"
     },
     {
@@ -261,6 +289,7 @@
       "likes": 1409,
       "pipeline_tag": "any-to-any",
       "created": "2026-02-03",
+      "released": "2026-02-03",
       "status": "ok"
     },
     {
@@ -270,6 +299,7 @@
       "likes": 992,
       "pipeline_tag": "image-to-image",
       "created": "2026-01-14",
+      "released": "2026-01-14",
       "status": "ok"
     },
     {
@@ -279,6 +309,7 @@
       "likes": 1065,
       "pipeline_tag": "text-to-speech",
       "created": "2026-03-09",
+      "released": "2026-03-09",
       "status": "ok"
     },
     {
@@ -288,6 +319,7 @@
       "likes": 145,
       "pipeline_tag": "text-to-video",
       "created": "2025-07-28",
+      "released": "2025-07-28",
       "status": "ok"
     },
     {
@@ -297,6 +329,7 @@
       "likes": 52,
       "pipeline_tag": "text-to-video",
       "created": "2025-03-01",
+      "released": "2025-03-01",
       "status": "ok"
     },
     {
@@ -306,6 +339,7 @@
       "likes": 895,
       "pipeline_tag": "text-to-image",
       "created": "2025-12-30",
+      "released": "2025-12-30",
       "status": "ok"
     },
     {
@@ -315,6 +349,7 @@
       "likes": 577,
       "pipeline_tag": "text-to-speech",
       "created": "2025-12-11",
+      "released": "2025-12-11",
       "status": "ok"
     },
     {
@@ -324,6 +359,7 @@
       "likes": 225,
       "pipeline_tag": "text-to-speech",
       "created": "2026-04-02",
+      "released": "2026-04-02",
       "status": "ok"
     },
     {
@@ -333,6 +369,7 @@
       "likes": 183,
       "pipeline_tag": "image-to-image",
       "created": "2025-12-05",
+      "released": "2025-12-05",
       "status": "ok"
     },
     {
@@ -342,6 +379,7 @@
       "likes": 446,
       "pipeline_tag": "any-to-any",
       "created": "2025-06-06",
+      "released": "2025-06-06",
       "status": "ok"
     },
     {
@@ -351,6 +389,7 @@
       "likes": 1114,
       "pipeline_tag": "image-text-to-image",
       "created": "2025-12-17",
+      "released": "2025-12-17",
       "status": "ok"
     },
     {
@@ -360,6 +399,7 @@
       "likes": 247,
       "pipeline_tag": "text-to-image",
       "created": "2025-12-04",
+      "released": "2025-12-04",
       "status": "ok"
     },
     {
@@ -369,6 +409,7 @@
       "likes": 743,
       "pipeline_tag": "text-to-speech",
       "created": "2025-06-18",
+      "released": "2025-06-18",
       "status": "ok"
     },
     {
@@ -378,6 +419,7 @@
       "likes": 159,
       "pipeline_tag": "any-to-any",
       "created": "2025-09-18",
+      "released": "2025-09-18",
       "status": "ok"
     },
     {
@@ -387,6 +429,7 @@
       "likes": 89,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-09",
+      "released": "2026-02-09",
       "status": "ok"
     },
     {
@@ -396,6 +439,7 @@
       "likes": 275,
       "pipeline_tag": null,
       "created": "2026-03-10",
+      "released": "2026-06-01",
       "status": "ok"
     },
     {
@@ -405,6 +449,7 @@
       "likes": 1000,
       "pipeline_tag": "image-to-image",
       "created": "2025-09-25",
+      "released": "2025-09-25",
       "status": "ok"
     },
     {
@@ -414,6 +459,7 @@
       "likes": 660,
       "pipeline_tag": "text-to-image",
       "created": "2026-04-07",
+      "released": "2026-04-07",
       "status": "ok"
     },
     {
@@ -423,6 +469,7 @@
       "likes": 444,
       "pipeline_tag": "image-to-video",
       "created": "2025-08-25",
+      "released": "2025-08-25",
       "status": "ok"
     },
     {
@@ -432,6 +479,7 @@
       "likes": 867,
       "pipeline_tag": "text-to-speech",
       "created": "2025-11-17",
+      "released": "2026-03-26",
       "status": "ok"
     },
     {
@@ -441,6 +489,7 @@
       "likes": 61,
       "pipeline_tag": "robotics",
       "created": "2026-02-25",
+      "released": "2026-02-25",
       "status": "ok"
     },
     {
@@ -450,6 +499,7 @@
       "likes": 564,
       "pipeline_tag": "text-to-speech",
       "created": "2026-06-04",
+      "released": "2026-06-04",
       "status": "ok"
     },
     {
@@ -459,6 +509,7 @@
       "likes": 34,
       "pipeline_tag": "image-to-video",
       "created": "2025-06-04",
+      "released": "2025-06-04",
       "status": "ok"
     },
     {
@@ -468,6 +519,7 @@
       "likes": 1085,
       "pipeline_tag": "text-to-image",
       "created": "2026-01-08",
+      "released": "2026-01-08",
       "status": "ok"
     },
     {
@@ -477,6 +529,7 @@
       "likes": 188,
       "pipeline_tag": null,
       "created": "2026-03-10",
+      "released": "2026-06-01",
       "status": "ok"
     },
     {
@@ -486,6 +539,7 @@
       "likes": 30,
       "pipeline_tag": "image-to-video",
       "created": "2025-06-04",
+      "released": "2025-06-04",
       "status": "ok"
     },
     {
@@ -495,6 +549,7 @@
       "likes": 287,
       "pipeline_tag": "any-to-any",
       "created": "2026-04-22",
+      "released": "2026-04-22",
       "status": "ok"
     },
     {
@@ -504,6 +559,7 @@
       "likes": 38,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-11",
+      "released": "2026-02-11",
       "status": "ok"
     },
     {
@@ -513,6 +569,7 @@
       "likes": 44,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-08",
+      "released": "2026-02-08",
       "status": "ok"
     },
     {
@@ -522,6 +579,7 @@
       "likes": 1207,
       "pipeline_tag": "any-to-any",
       "created": "2025-05-19",
+      "released": "2025-05-19",
       "status": "ok"
     },
     {
@@ -531,6 +589,7 @@
       "likes": 19,
       "pipeline_tag": "any-to-any",
       "created": "2026-02-21",
+      "released": "2026-02-21",
       "status": "ok"
     },
     {
@@ -540,6 +599,7 @@
       "likes": 1,
       "pipeline_tag": "text-to-video",
       "created": "2025-11-27",
+      "released": "2025-11-27",
       "status": "ok"
     },
     {
@@ -549,6 +609,7 @@
       "likes": 399,
       "pipeline_tag": "text-to-image",
       "created": "2026-04-02",
+      "released": "2026-04-02",
       "status": "ok"
     },
     {
@@ -558,6 +619,7 @@
       "likes": 28,
       "pipeline_tag": "text-to-image",
       "created": "2025-12-23",
+      "released": "2025-12-23",
       "status": "ok"
     },
     {
@@ -567,6 +629,7 @@
       "likes": 98,
       "pipeline_tag": "audio-to-audio",
       "created": "2026-03-16",
+      "released": "2026-03-16",
       "status": "ok"
     },
     {
@@ -576,6 +639,7 @@
       "likes": 1,
       "pipeline_tag": "image-to-video",
       "created": "2026-01-11",
+      "released": "2026-01-11",
       "status": "ok"
     },
     {
@@ -585,6 +649,7 @@
       "likes": 49,
       "pipeline_tag": "text-to-video",
       "created": "2026-02-23",
+      "released": "2026-02-23",
       "status": "ok"
     },
     {
@@ -594,6 +659,7 @@
       "likes": 6,
       "pipeline_tag": null,
       "created": "2026-03-10",
+      "released": "2026-03-10",
       "status": "ok"
     },
     {
@@ -603,6 +669,7 @@
       "likes": 0,
       "pipeline_tag": "text-to-video",
       "created": "2025-11-27",
+      "released": "2025-11-27",
       "status": "ok"
     },
     {
@@ -612,6 +679,7 @@
       "likes": 34,
       "pipeline_tag": "text-to-video",
       "created": "2026-02-23",
+      "released": "2026-02-23",
       "status": "ok"
     },
     {
@@ -621,6 +689,7 @@
       "likes": 0,
       "pipeline_tag": "image-to-video",
       "created": "2025-11-29",
+      "released": "2025-11-29",
       "status": "ok"
     },
     {
@@ -630,6 +699,7 @@
       "likes": 30,
       "pipeline_tag": "robotics",
       "created": "2026-02-04",
+      "released": "2026-02-04",
       "status": "ok"
     },
     {
@@ -639,6 +709,7 @@
       "likes": 0,
       "pipeline_tag": "any-to-any",
       "created": "2026-03-10",
+      "released": "2026-03-10",
       "status": "ok"
     },
     {
@@ -648,6 +719,7 @@
       "likes": 101,
       "pipeline_tag": "automatic-speech-recognition",
       "created": "2026-04-23",
+      "released": "2026-04-23",
       "status": "ok"
     },
     {
@@ -657,6 +729,7 @@
       "likes": 342,
       "pipeline_tag": "text-to-speech",
       "created": "2025-12-10",
+      "released": "2025-12-10",
       "status": "ok"
     },
     {
@@ -666,6 +739,7 @@
       "likes": 162,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-06",
+      "released": "2026-02-06",
       "status": "ok"
     },
     {
@@ -675,6 +749,7 @@
       "likes": 1049,
       "pipeline_tag": "any-to-any",
       "created": "2026-05-15",
+      "released": "2026-05-15",
       "status": "ok"
     },
     {
@@ -684,6 +759,7 @@
       "likes": 1,
       "pipeline_tag": "image-to-video",
       "created": "2025-11-29",
+      "released": "2025-11-29",
       "status": "ok"
     },
     {
@@ -693,6 +769,7 @@
       "likes": 20,
       "pipeline_tag": null,
       "created": "2025-09-30",
+      "released": "2025-10-13",
       "status": "ok"
     },
     {
@@ -702,6 +779,7 @@
       "likes": 10,
       "pipeline_tag": "text-to-video",
       "created": "2026-02-23",
+      "released": "2026-02-23",
       "status": "ok"
     },
     {
@@ -711,6 +789,7 @@
       "likes": 40,
       "pipeline_tag": "robotics",
       "created": "2026-01-05",
+      "released": "2026-01-05",
       "status": "ok"
     },
     {
@@ -720,6 +799,7 @@
       "likes": 0,
       "pipeline_tag": "text-to-audio",
       "created": "2026-04-06",
+      "released": "2026-04-06",
       "status": "ok"
     },
     {
@@ -729,6 +809,7 @@
       "likes": 2,
       "pipeline_tag": "image-to-video",
       "created": "2026-04-03",
+      "released": "2026-04-03",
       "status": "ok"
     },
     {
@@ -738,6 +819,7 @@
       "likes": 0,
       "pipeline_tag": null,
       "created": "2026-01-14",
+      "released": "2026-01-14",
       "status": "ok"
     },
     {
@@ -747,6 +829,7 @@
       "likes": 13,
       "pipeline_tag": null,
       "created": "2026-03-09",
+      "released": "2026-03-09",
       "status": "ok"
     },
     {
@@ -756,6 +839,7 @@
       "likes": null,
       "pipeline_tag": null,
       "created": null,
+      "released": null,
       "status": "gated"
     }
   ]

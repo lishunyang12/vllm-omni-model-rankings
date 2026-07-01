@@ -40,13 +40,35 @@ def get_model_ids() -> list[str]:
     return sorted(ids)
 
 
+def _first_public_commit(m: str) -> str | None:
+    """Oldest *visible* commit date (YYYY-MM-DD) as a 'went public' proxy.
+
+    For normal repos this equals the HF ``createdAt`` (the initial commit).
+    For repos that were staged private then squashed at release (e.g. a
+    ``Super-squash branch 'main'`` commit, as NVIDIA did for Cosmos3-Nano),
+    the private history is discarded, so the oldest visible commit is the
+    publish date rather than the private-staging date. Returns None if the
+    commits API is unavailable (gated repos 401 here)."""
+    url = f"https://huggingface.co/api/models/{m}/commits/main?limit=1000"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "omni-rankings"})
+        with urllib.request.urlopen(req, timeout=25) as r:
+            commits = json.load(r)
+        if commits:
+            return (commits[-1].get("date") or "")[:10] or None
+    except Exception:  # noqa: BLE001
+        return None
+    return None
+
+
 def fetch(m: str) -> dict:
     url = f"https://huggingface.co/api/models/{m}?expand[]=downloads&expand[]=downloadsAllTime&expand[]=likes&expand[]=pipeline_tag&expand[]=createdAt"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "omni-rankings"})
         with urllib.request.urlopen(req, timeout=25) as r:
             d = json.load(r)
-        created = (d.get("createdAt") or "")[:10]  # ISO timestamp -> YYYY-MM-DD
+        created = (d.get("createdAt") or "")[:10]  # HF repo-creation date
+        released = _first_public_commit(m) or created or None  # went-public proxy
         return {
             "id": m,
             "downloads_30d": d.get("downloads"),
@@ -54,14 +76,16 @@ def fetch(m: str) -> dict:
             "likes": d.get("likes"),
             "pipeline_tag": d.get("pipeline_tag"),
             "created": created or None,
+            "released": released,
             "status": "ok",
         }
     except urllib.error.HTTPError as e:
         return {"id": m, "downloads_30d": None, "downloads_all": None, "likes": None,
-                "pipeline_tag": None, "created": None, "status": ("gated" if e.code == 401 else f"http_{e.code}")}
+                "pipeline_tag": None, "created": None, "released": None,
+                "status": ("gated" if e.code == 401 else f"http_{e.code}")}
     except Exception as e:  # noqa: BLE001
         return {"id": m, "downloads_30d": None, "downloads_all": None, "likes": None,
-                "pipeline_tag": None, "created": None, "status": type(e).__name__}
+                "pipeline_tag": None, "created": None, "released": None, "status": type(e).__name__}
 
 
 def collect() -> list[dict]:
@@ -87,13 +111,13 @@ def render_html(rows: list[dict], generated: str) -> str:
         medal = {1: "🥇", 2: "🥈", 3: "🥉"}.get(i, "")
         tag = html.escape(r["pipeline_tag"] or "")
         note = "" if r["status"] == "ok" else f' <span class="badge">{html.escape(r["status"])}</span>'
-        created = r.get("created") or ""
+        released = r.get("released") or ""
         trs.append(
             f'<tr>'
             f'<td class="rank">{medal or i}</td>'
             f'<td class="model"><a href="https://huggingface.co/{mid}" target="_blank" rel="noopener">{mid}</a>{note}</td>'
             f'<td class="tag">{tag}</td>'
-            f'<td class="date" data-v="{created}">{created or "&mdash;"}</td>'
+            f'<td class="date" data-v="{released}">{released or "&mdash;"}</td>'
             f'<td class="num" data-v="{r["downloads_30d"] or 0}">{cell(r["downloads_30d"])}</td>'
             f'<td class="num" data-v="{r["downloads_all"] or 0}">{cell(r["downloads_all"])}</td>'
             f'<td class="num" data-v="{r["likes"] or 0}">{cell(r["likes"])}</td>'
@@ -169,6 +193,8 @@ def render_html(rows: list[dict], generated: str) -> str:
   <footer>
     Last updated {generated}. Data: HuggingFace public API
     (<code>downloads</code> = last 30 days, <code>downloadsAllTime</code> = cumulative).
+    <b>Released</b> = oldest visible commit on the HF repo (a "went public" proxy;
+    for gated repos it falls back to the repo-creation date).
     Some entries are the upstream base weights an integration builds on.
     Machine-readable: <a href="data.json">data.json</a>.
   </footer>
