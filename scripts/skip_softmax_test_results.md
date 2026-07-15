@@ -14,26 +14,37 @@ Quality metrics follow the video-acceleration convention (Sparse-vDiT / SVG2): r
 |-------|---------------|---------|---------------|-------|
 | **Wan 2.2 I2V** | `Wan-AI/Wan2.2-I2V-A14B-Diffusers` | I2V | 720p (or 480p), 5s | A14B MoE; H40/D128 = the FlashInfer B300 validated shape |
 | **Hunyuan Video 1.5** | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | T2V | 720p, 8.3B | 1.5 line; **FP8 E4M3 checkpoints already exist** (`hy15_720p_*_fp8_e4m3_lightx2v`) → feeds the FP8 arm directly. I2V = `...-720p_i2v` |
-| **Cosmos 3 Super** | `nvidia/Cosmos-Predict2.5-14B` | **T2V + I2V + V2V** (unified) | 720p = 1280×704, 16fps, 5s (~80f) | one checkpoint runs all three modes; matches vllm-omni Cosmos3 + FP8 loader #5076. "Super" = 14B/720p post-trained |
+| **Cosmos 3 Super 64B** | `nvidia/Cosmos-...-Super-64B` (confirm repo id — internal/large, not public 2B/14B) | **T2V + I2V + V2V** (unified) | 720p, 5s | one checkpoint runs all three modes; matches vllm-omni Cosmos3 + FP8 loader #5076 |
 | Cheap-iter (Wan) | `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | TI2V | 720p | lighter shape for sweeps / CI |
 | Cheap-iter (Hunyuan) | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_t2v` | T2V | 480p | fast sweeps / CI |
-| Cheap-iter (Cosmos) | `nvidia/Cosmos-Predict2.5-2B` | T2V/I2V/V2V | 480p (832×480) | fast iteration before the 14B run |
+| Cheap-iter (Cosmos) | `nvidia/Cosmos-Predict2.5-2B` / `-14B` | T2V/I2V/V2V | 480p / 720p | public proxy for fast iteration before the 64B run |
 
-**Task coverage:** Wan 2.2 = **I2V**; Hunyuan 1.5 = **T2V** (I2V variant available); Cosmos 3 Super = **T2V + I2V + V2V** (unified checkpoint, run each mode). Iterate the sparsity/timestep sweep on the light checkpoints (TI2V-5B, Hunyuan 480p, Cosmos 2B), then confirm the operating point + quality gate on the primaries (Wan I2V A14B, Hunyuan 1.5 720p, Cosmos 14B).
+**Task coverage:** Wan 2.2 = **I2V**; Hunyuan 1.5 = **T2V** (I2V variant available); Cosmos 3 Super 64B = **T2V + I2V + V2V** (unified checkpoint, run each mode). Iterate the sparsity/timestep sweep on the light checkpoints (TI2V-5B, Hunyuan 480p, Cosmos 2B/14B proxy), then confirm the operating point + quality gate on the primaries (Wan I2V A14B, Hunyuan 1.5 720p, **Cosmos 3 Super 64B**).
+
+**vLLM-Omni pipelines (already in repo):**
+
+| Model | pipeline class | file | quant status |
+|-------|----------------|------|--------------|
+| Hunyuan 1.5 T2V | `HunyuanVideo15Pipeline` | `diffusion/models/hunyuan_video/pipeline_hunyuan_video_1_5.py` | **FP8 wired** — stage config `hunyuan_video_15_dit_fp8.yaml` + `examples/quantization/quantize_hunyuanvideo_15_modelopt_fp8.py` |
+| Hunyuan 1.5 I2V | `HunyuanVideo15ImageToVideoPipeline` | `..._1_5_i2v.py` | same FP8 path |
+| Cosmos 3 | `Cosmos3OmniDiffusersPipeline` | `diffusion/models/cosmos3/pipeline_cosmos3.py` (uses Wan VAE + UniPC) | FP8 loader #5076 |
+| Wan 2.2 I2V | Wan I2V pipeline | `diffusion/models/wan/...` | ModelOpt FP8/NVFP4 loader #5076/#5087 |
 
 ---
 
 ## Table 1 — Shape / envelope probe (is the model in the validated case?)
 
-Validated kernel envelope: **SM103 (B300) · FP8 · head_dim=128 · dense MHA (q_heads=kv_heads)**. Anything else = needs kernel extension or falls back to flash-attn. Pre-filled from model configs — **confirm head_dim/heads/L on the box** (L depends on H,W,frames).
+Validated kernel envelope (from the B300 report): **SM103 · FP8 · head_dim=128 · dense MHA (q_heads=kv_heads)**. Values below read from the actual HF `transformer/config.json` (Wan, Hunyuan) — Cosmos config is gated, confirm on the box.
 
 | Model          | head_dim | heads (q / kv) | attn type | typical L (tokens) | target SM | in envelope? | plan |
 |----------------|:--------:|:--------------:|:---------:|:------------------:|:---------:|:------------:|------|
-| Wan 2.2 I2V A14B      | 128 | 40 / 40 | MHA | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
-| Hunyuan Video 1.5 (T2V) | 128 (confirm) | (confirm) | MHA (confirm) | (compute per res) | SM103 | yes (confirm) | native |
-| Cosmos 3 Super 14B (T2V/I2V/V2V) | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
-| Wan 2.2 TI2V-5B (iter)   | 128 (confirm) | 24 / 24 (confirm) | MHA | (compute) | SM103 | yes (confirm) | native |
-| Cosmos 3 2B (iter)       | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
+| Wan 2.2 I2V A14B      | **128** | **40 / 40** | **MHA** ✓ | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
+| Hunyuan Video 1.5 (T2V) | **128** | **16 / 16** | **MHA** ✓ | (compute per res) | SM103 | **yes** | native |
+| **Cosmos 3 Super 64B** (T2V/I2V/V2V) | 128 (confirm) | **q / kv — likely GQA** | **GQA?** | (compute) | SM103 | **⚠ verify** | see note |
+| Hunyuan 1.5 480p (iter)  | 128 | 16 / 16 | MHA ✓ | (compute) | SM103 | yes | native |
+| Cosmos 3 2B/14B (iter)   | 128 (confirm) | likely GQA | GQA? | (compute) | SM103 | ⚠ verify | see note |
+
+> **⚠ Cosmos 3 GQA finding:** the vllm-omni `transformer_cosmos3.py` attention takes `num_attention_heads` **and a separate `num_key_value_heads`**, projecting K/V with `num_kv_heads` — i.e. the arch is **GQA-capable** (Cosmos-Predict2 public is GQA). The B300 validation only covered **dense MHA**, so Cosmos is **not covered by that report**. The FlashInfer `trtllm_ragged_attention_deepseek` kernel is natively GQA/MQA (it's the DeepSeek path), so GQA likely runs — but **the SAGE per-block-scale layout + Skip predicate under GQA are untested**. Action: confirm Cosmos's actual `num_kv_heads` and validate SAGE+Skip on a GQA shape before trusting it; else fall back to flash-attn for Cosmos.
 
 ---
 
