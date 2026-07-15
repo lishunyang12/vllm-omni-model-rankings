@@ -84,7 +84,7 @@ class TrtllmGenConfig:                 # mirrors TRT-LLM SkipSoftmaxAttentionCon
 
 Per-model curve. Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` (written to `config.json`). (SAGE needs no calibration.)
 
-**D = fidelity** retained vs BF16 dense (1.00 = lossless → 0.94 = most aggressive). From the sweep, pick the `target_sparsity` whose LPIPS meets each D; Steps 2–3 use those three operating points. So `D` is the quality label, `target_sparsity` is the knob the user actually sets.
+Two independent knobs: **`target_sparsity`** (how much to skip → `factor`, from the curve) and **`D = disabled_until_timestep`** (when skip starts; normalized denoise t 1→0). Steps 2–3 **fix `target_sparsity` and sweep D** = 1.00 / 0.97 / 0.94 (1.00 = skip disabled all denoise = dense sanity anchor → 0.94 = skip starts earliest = most aggressive). Calibration here fits `factor(target_sparsity)` only; D is a runtime gate, not calibrated.
 
 **Setup** (per model)
 
@@ -102,13 +102,13 @@ Per-model curve. Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsit
 | achieved sparsity |  |  |  |  |  |  |  |  |  |
 | LPIPS ↓ |  |  |  |  |  |  |  |  |  |
 
-**Fitted coefficients + operating points**
+**Fitted curve** — `factor = a·exp(b·target_sparsity)` per model. Steps 2–3 fix one `target_sparsity` → one `factor`.
 
-| Model | a | b | factor @ D1.00 | factor @ D0.97 | factor @ D0.94 |
-|-------|:-:|:-:|:--------------:|:--------------:|:--------------:|
-| Wan 2.2 |  |  |  |  |  |
-| Hunyuan 1.5 |  |  |  |  |  |
-| Cosmos 3 |  |  |  |  |  |
+| Model | a | b | run target_sparsity | → factor |
+|-------|:-:|:-:|:-------------------:|:--------:|
+| Wan 2.2 |  |  |  |  |
+| Hunyuan 1.5 |  |  |  |  |
+| Cosmos 3 |  |  |  |  |
 
 ---
 
@@ -131,7 +131,7 @@ At BF16 dense: **trtgen == current backend** (LPIPS ≈ 0).
 
 ## Step 2 — Skip-Softmax
 
-Skip on BF16 attention (no SAGE).
+Skip on BF16 attention (no SAGE). Fixed `target_sparsity` (→ factor); sweep **D = `disabled_until_timestep`**.
 
 | Model | D | LPIPS ↓ | speedup |
 |-------|:---:|:-------:|:-------:|
@@ -149,7 +149,7 @@ Skip on BF16 attention (no SAGE).
 
 ## Step 3 — SAGE + Skip
 
-FP8-SAGE + Skip at each D.
+FP8-SAGE + Skip. Same fixed `target_sparsity`; sweep **D = `disabled_until_timestep`**.
 
 | Model | D | LPIPS ↓ | speedup |
 |-------|:---:|:-------:|:-------:|
@@ -167,7 +167,7 @@ FP8-SAGE + Skip at each D.
 
 ## Step 4 — cross-backend comparison
 
-Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA. Run per model (Wan / Hunyuan / Cosmos).
+Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA (= BF16 dense). Run per model (Wan / Hunyuan / Cosmos).
 
 | Backend | attention | LPIPS ↓ | speedup | notes |
 |---------|-----------|:-------:|:-------:|-------|
