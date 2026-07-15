@@ -37,7 +37,7 @@ vllm-omni serve <model> \
   --trtllm-gen-disabled-until-timestep 0.6       # keep initial (noisy) denoise steps dense
 ```
 
-**Route: `target_sparsity` (not `threshold_scale_factor`).** The user picks `target_sparsity`; a **ModelOpt-calibrated checkpoint** carries a **config file** mapping `target_sparsity ↔ threshold_scale_factor` (**no weight modification**). vLLM-Omni reads that mapping and resolves the kernel factor internally — the user never touches `threshold_scale_factor`. No calibrated checkpoint → skip stays off (dense).
+Needs a ModelOpt-calibrated checkpoint. No calibrated checkpoint → skip stays off (dense).
 
 ### 4. vLLM-Omni knobs
 
