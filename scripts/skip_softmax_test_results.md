@@ -17,7 +17,7 @@ vllm-omni serve <model> --diffusion-attention-backend trtllm-gen
 export DIFFUSION_ATTENTION_BACKEND=trtllm-gen
 ```
 
-Plain `trtllm-gen` runs **dense BF16 attention through the trtllm-gen kernel** — the baseline / parity backend (same math as SDPA → LPIPS ≈ 0 vs current backend). SAGE and Skip are **opt-in** on top.
+= BF16 dense baseline. SAGE / Skip opt-in on top.
 
 ### 2. Add FP8-SAGE
 
@@ -26,7 +26,7 @@ vllm-omni serve <model> --diffusion-attention-backend trtllm-gen --trtllm-gen-sa
 # env: TRTLLM_GEN_SAGE=1
 ```
 
-FP8-SAGE attention (runtime, dynamic, no calibration, no checkpoint change).
+FP8-SAGE (no calibration).
 
 ### 3. Add Skip-Softmax (needs a calibrated checkpoint)
 
@@ -40,8 +40,6 @@ vllm-omni serve <model> \
 Needs a ModelOpt-calibrated checkpoint. No calibrated checkpoint → skip stays off (dense).
 
 ### 4. vLLM-Omni knobs
-
-Three vLLM-Omni-native knobs on top of the backend:
 
 ```python
 @dataclass
@@ -82,9 +80,7 @@ class TrtllmGenConfig:                 # mirrors TRT-LLM SkipSoftmaxAttentionCon
 
 ## ModelOpt skip calibration
 
-Per-model curve. Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` (written to `config.json`). (SAGE needs no calibration.)
-
-Two independent knobs: **`target_sparsity`** (how much to skip → `factor`, from the curve) and **`D = disabled_until_timestep`** (when skip starts; normalized denoise t 1→0). Steps 2–3 **fix `target_sparsity` and sweep D** = 1.00 / 0.97 / 0.94 (1.00 = skip disabled all denoise = dense sanity anchor → 0.94 = skip starts earliest = most aggressive). Calibration here fits `factor(target_sparsity)` only; D is a runtime gate, not calibrated.
+Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` → `config.json`. Steps 2–3 fix `target_sparsity`, sweep **D = `disabled_until_timestep`** (1.00 = off → 0.94 = most aggressive). D is a runtime gate, not calibrated.
 
 **Setup** (per model)
 
