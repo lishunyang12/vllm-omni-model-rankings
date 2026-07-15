@@ -54,24 +54,6 @@ The `a,b` curve is read from the checkpoint (ModelOpt-calibrated); the user only
 | `--trtllm-gen-skip-sparsity` | `sparse_attention_config: {algorithm: skip_softmax, target_sparsity}` | `skip_softmax_threshold_scale_factor = a·exp(b·sparsity)` (threshold = factor / seqlen) |
 | `--trtllm-gen-skip-disabled-until` | — (DiT runtime; not in TRT-LLM's LLM config) | host-side gate, no kernel arg |
 
-No dedicated YAML — these are standard CLI flags / env vars (also settable via vLLM's generic `--config *.yaml`). Enum member + hyphen-normalize:
-
-```python
-# registry.py: TRTLLM_GEN = "...backends.trtllm_attn.TrtllmAttentionBackend"
-# cuda/platform.py: backend_upper = selected_backend.upper().replace("-", "_")  # trtllm-gen -> TRTLLM_GEN
-# gate (mirrors SAGE_ATTN_3): Blackwell SM>=100 + flashinfer + head_dim=128 dense MHA, else fall back.
-```
-
-### 4. What vLLM-Omni does at runtime
-
-- Reads `skip_sparsity` → `factor = a·exp(b·skip_sparsity)` (`a,b` from checkpoint; `None` → dense).
-- Computes L once per generation (DiT: L fixed from H,W,frames,VAE,patch).
-- Gates skip by denoise timestep (`>= disabled_until_timestep`).
-- Keys CUDA graphs per (L, skip on/off).
-- Calls `trtllm_ragged_attention_deepseek(..., is_causal=False, skip_softmax_threshold_scale_factor=factor)` — threshold = factor / L.
-
-**Fallback:** SM<100 / head_dim≠128 / GQA / no calibrated checkpoint → flash-attn.
-
 ---
 
 ## Models
