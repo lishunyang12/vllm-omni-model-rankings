@@ -54,17 +54,43 @@ Both together: FP8-SAGE + Skip at each D.
 
 ---
 
-## Fallback gates
+## ModelOpt skip calibration (prereq for Steps 2–3)
 
-| Case | Expected | PASS? |
-|------|----------|:-----:|
-| unsupported SM / head_dim≠128 / GQA | falls back to flash-attn |  |
-| no calibration & no theta | skip disabled → dense |  |
-| sparsity = 0 | dense, no skip |  |
-| valid case (SM103+FP8+D128+MHA) | trtllm-gen, skip active |  |
+Skip needs a **per-model** D → `threshold_scale_factor` curve. Calibration sweeps `target_sparsity` on a fine grid, measures achieved sparsity + LPIPS at each point, and fits `factor = a·exp(b·target_sparsity)` **per `config_group`** (written into checkpoint `config.json`, `ignore` layers kept dense). The 3 D points in Steps 2–3 are operating points read off this curve.
+
+**Setup** (per model)
+
+| Model | calib prompts / dataset | # samples | res / frames | timesteps | config_groups | ignore layers (dense) |
+|-------|-------------------------|:---------:|--------------|-----------|---------------|-----------------------|
+| Wan 2.2 |  |  | 720×1080 / 81 |  |  |  |
+| Hunyuan 1.5 |  |  |  |  |  |  |
+| Cosmos 3 |  |  |  |  |  | GQA — separate |
+
+**Sweep** (per model; fine grid to fit the curve)
+
+*Model: ______ · config_group: ______*
+
+| target_sparsity | threshold factor | achieved sparsity | LPIPS ↓ | fidelity D |
+|:---------------:|:----------------:|:-----------------:|:-------:|:----------:|
+| 0.10 |  |  |  |  |
+| 0.20 |  |  |  |  |
+| 0.30 |  |  |  |  |
+| 0.40 |  |  |  |  |
+| 0.50 |  |  |  |  |
+| 0.60 |  |  |  |  |
+| 0.70 |  |  |  |  |
+| 0.80 |  |  |  |  |
+| 0.90 |  |  |  |  |
+
+**Fitted coefficients + operating points**
+
+| Model | config_group | a | b | factor @ D1.00 | factor @ D0.97 | factor @ D0.94 |
+|-------|--------------|:-:|:-:|:--------------:|:--------------:|:--------------:|
+| Wan 2.2 |  |  |  |  |  |  |
+| Hunyuan 1.5 |  |  |  |  |  |  |
 
 ## Notes
 
-- **SAGE = no calibration; Skip = per-model calibration.** So Step 1 needs zero setup; Steps 2–3 need Wan's skip calibration first.
-- Measure LPIPS vs **BF16 dense**; measure perf on the **target Blackwell SKU under real concurrency**, not the isolated B300 kernel numbers.
-- **Cosmos 3 is GQA** (separate `num_key_value_heads`) → outside the dense-MHA validation. Kernel likely runs (trtllm-gen is natively GQA) but SAGE+Skip under GQA is untested — just record run/fallback.
+- **SAGE = no calibration; Skip = per-model calibration** (per `config_group`, per resolution).
+- Measure LPIPS vs **BF16 dense**; measure perf on the **target Blackwell SKU under real concurrency**.
+- **Cosmos 3 is GQA** → outside dense-MHA validation; calibrate + validate separately.
