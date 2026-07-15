@@ -2,19 +2,37 @@
 
 Fill these in during the vLLM-Omni integration. Backend = `trtllm` (FlashInfer trtllm-gen); features = `sage` (FP8-SAGE attention) + `skip_softmax`. Note: on B300, SAGE attention is **FP8** (NVFP4 = GEMM/weight axis only); the standalone SAGE_ATTN / SAGE_ATTN_3 backends do **not** run on B300.
 
-Baseline for all speedups = **BF16 compiled-dense**. Quality reference = **BF16 dense** (LPIPS/PSNR measured against it).
+Baseline for all speedups = **BF16 compiled-dense**. Quality reference = **BF16 dense** (LPIPS/PSNR/SSIM measured against it).
+
+Quality metrics follow the video-acceleration convention (Sparse-vDiT / SVG2): reference-based **LPIPS ↓ (primary) / PSNR ↑ / SSIM ↑** vs the BF16-dense output, plus **VBench** for overall + temporal quality. Kernel-level (vs full-precision attention): **cosine sim / relative-L1 / RMSE** (SageAttention convention).
+
+---
+
+## Model checkpoints (chosen)
+
+| Model | HF checkpoint | variant | default shape | notes |
+|-------|---------------|---------|---------------|-------|
+| **Wan 2.2** | `Wan-AI/Wan2.2-T2V-A14B-Diffusers` | T2V, A14B MoE | 720p, 5s @ ~16fps | **primary** — this is the deck's Wan 2.2; H40/D128 = the FlashInfer B300 validated shape |
+| Wan 2.2 (cheap iter) | `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | TI2V, 5B | 720p @ 24fps | lighter shape for fast sweeps / CI |
+| **Hunyuan Video** | `hunyuanvideo-community/HunyuanVideo` | T2V | 720p×1280, 129f | diffusers layout (community repo); the standard T2V baseline |
+| **Cosmos 3** | `nvidia/Cosmos-Predict2.5-14B` | Predict2.5, T2V/I2V/V2V | 720×1280, 189f | vllm-omni Cosmos3 pipeline; matches FP8 loader #5076 |
+| Cosmos 3 (cheap iter) | `nvidia/Cosmos-Predict2.5-2B` | Predict2.5, 2B | 720×1280 | fast iteration / CI before the 14B run |
+
+Iterate the sparsity/timestep sweep on the light checkpoints (TI2V-5B, Cosmos 2B), then confirm the operating point + quality gate on the primaries (A14B, Hunyuan, Cosmos 14B).
 
 ---
 
 ## Table 1 — Shape / envelope probe (is the model in the validated case?)
 
-Validated kernel envelope: **SM103 (B300) · FP8 · head_dim=128 · dense MHA (q_heads=kv_heads)**. Anything else = needs kernel extension or falls back to flash-attn.
+Validated kernel envelope: **SM103 (B300) · FP8 · head_dim=128 · dense MHA (q_heads=kv_heads)**. Anything else = needs kernel extension or falls back to flash-attn. Pre-filled from model configs — **confirm head_dim/heads/L on the box** (L depends on H,W,frames).
 
-| Model          | head_dim | heads (q / kv) | attn type (MHA/GQA) | typical L (tokens) | target SM | in envelope? | plan (native / needs-kernel / fallback) |
-|----------------|:--------:|:--------------:|:-------------------:|:------------------:|:---------:|:------------:|-----------------------------------------|
-| Wan 2.2 A14B   |          |                |                     |                    |           |              |                                         |
-| Hunyuan Video  |          |                |                     |                    |           |              |                                         |
-| Cosmos 3       |          |                |                     |                    |           |              |                                         |
+| Model          | head_dim | heads (q / kv) | attn type | typical L (tokens) | target SM | in envelope? | plan |
+|----------------|:--------:|:--------------:|:---------:|:------------------:|:---------:|:------------:|------|
+| Wan 2.2 A14B (T2V) | 128 | 40 / 40 | MHA | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
+| Wan 2.2 TI2V-5B    | 128 (confirm) | 24 / 24 (confirm) | MHA | (compute) | SM103 | yes (confirm) | native |
+| Hunyuan Video (T2V)| 128 | 24 / 24 | MHA | (compute per res) | SM103 | **yes** | native |
+| Cosmos Predict2.5-14B | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
+| Cosmos Predict2.5-2B  | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
 
 ---
 
@@ -22,7 +40,7 @@ Validated kernel envelope: **SM103 (B300) · FP8 · head_dim=128 · dense MHA (q
 
 Fill one block per model. Modes: `dense` = baseline; `SAGE`; `SAGE+Skip`. GEMM quant: BF16 / FP8 / NVFP4.
 
-| Model | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | VBench / PSNR | peak VRAM (GiB) | quality OK? | notes |
+| Model | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | PSNR/SSIM/VBench | peak VRAM (GiB) | quality OK? | notes |
 |-------|:----------:|:---------:|:------------:|:---------------:|:---------------------:|:-----------------:|:-------:|:-------------:|:---------------:|:-----------:|-------|
 | Wan 2.2 | BF16  | dense (ref) |            |                 | 1.00×                 | —                 | 0 (ref) | ref           |                 | ref         |       |
 | Wan 2.2 | FP8   | SAGE        |            |                 |                       | —                 |         |               |                 |             |       |
