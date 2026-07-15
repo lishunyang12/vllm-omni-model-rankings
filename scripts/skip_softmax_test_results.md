@@ -156,7 +156,6 @@ Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA. 
 | Backend | attention | LPIPS ↓ | speedup | notes |
 |---------|-----------|:-------:|:-------:|-------|
 | TORCH_SDPA                   | dense (ref)   | 0 (ref) | 1.00× | reference |
-| FA4 (FlashAttention 4)      | dense         |         |        | Blackwell dense baseline |
 | SAGE_ATTN (SageAttention 2) | FP8-SAGE      |         |        | runs on its supported SM |
 | **TRTLLM**                  | FP8-SAGE      |         |        |  |
 | **TRTLLM**                  | FP8-SAGE+Skip |         |        |  |
