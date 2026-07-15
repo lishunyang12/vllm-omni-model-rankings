@@ -13,7 +13,7 @@ Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip.**
 
 ---
 
-## ModelOpt skip calibration (prereq for Steps 2–3)
+## ModelOpt skip calibration
 
 Skip needs a **per-model** D → `threshold_scale_factor` curve. Calibration sweeps `target_sparsity` on a fine grid, measures achieved sparsity + LPIPS at each point, and fits `factor = a·exp(b·target_sparsity)` **per `config_group`** (written into checkpoint `config.json`, `ignore` layers kept dense). The 3 D points used in Steps 2–3 are operating points read off this curve. (SAGE needs no calibration → Step 1 can start without this.)
 
