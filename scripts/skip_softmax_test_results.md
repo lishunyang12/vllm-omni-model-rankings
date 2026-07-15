@@ -53,11 +53,11 @@ class TrtllmGenConfig:                 # mirrors TRT-LLM SkipSoftmaxAttentionCon
 
 **Maps to upstream:**
 
-| vLLM-Omni knob | TRT-LLM / ModelOpt | FlashInfer kernel arg |
-|----------------|--------------------|-----------------------|
-| `sage` | SAGE (separate axis; not in `SkipSoftmaxAttentionConfig`) | `sage_block_sizes=(q,k,v)` + `bmm1_scale`/`bmm2_scale` |
-| `target_sparsity` | ModelOpt calibration input → config file maps to `threshold_scale_factor` | `skip_softmax_threshold_scale_factor` (threshold = factor / seqlen) |
-| `disabled_until_timestep` | — (DiT-only; not in TRT-LLM's LLM config) | host-side gate, no kernel arg |
+| vLLM-Omni | TRT-LLM / ModelOpt | FlashInfer |
+|-----------|--------------------|------------|
+| `sage` | — | `sage_block_sizes` + `bmm1/bmm2_scale` |
+| `target_sparsity` | `threshold_scale_factor` (via calibration) | `skip_softmax_threshold_scale_factor` |
+| `disabled_until_timestep` | — (DiT-only) | host gate |
 
 ---
 
