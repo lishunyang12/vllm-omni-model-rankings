@@ -82,7 +82,9 @@ class TrtllmGenConfig:                 # mirrors TRT-LLM SkipSoftmaxAttentionCon
 
 ## ModelOpt skip calibration
 
-Per-model D → `threshold_scale_factor` curve. Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` (written to `config.json`). Steps 2–3 read D points off this curve. (SAGE needs no calibration.)
+Per-model curve. Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` (written to `config.json`). (SAGE needs no calibration.)
+
+**D = fidelity** retained vs BF16 dense (1.00 = lossless → 0.94 = most aggressive). From the sweep, pick the `target_sparsity` whose LPIPS meets each D; Steps 2–3 use those three operating points. So `D` is the quality label, `target_sparsity` is the knob the user actually sets.
 
 **Setup** (per model)
 
@@ -129,7 +131,7 @@ At BF16 dense: **trtgen == current backend** (LPIPS ≈ 0).
 
 ## Step 2 — Skip-Softmax
 
-Skip on BF16 attention. D = fidelity (1.00 ≈ no skip → 0.94 = most aggressive).
+Skip on BF16 attention (no SAGE).
 
 | Model | D | LPIPS ↓ | speedup |
 |-------|:---:|:-------:|:-------:|
@@ -171,8 +173,8 @@ Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA. 
 |---------|-----------|:-------:|:-------:|-------|
 | TORCH_SDPA                   | dense (ref)   | 0 (ref) | 1.00× | reference |
 | SAGE_ATTN (SageAttention 2) | FP8-SAGE      |         |        |  |
-| **TRTLLM**                  | FP8-SAGE      |         |        |  |
-| **TRTLLM**                  | FP8-SAGE+Skip |         |        |  |
+| **trtllm-gen**              | FP8-SAGE      |         |        |  |
+| **trtllm-gen**              | FP8-SAGE+Skip |         |        |  |
 
 ---
 
