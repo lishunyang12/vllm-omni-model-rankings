@@ -43,21 +43,7 @@ Baseline for all speedups = **BF16 dense**. **Primary quality metric = LPIPS ↓
 
 ---
 
-## Table 1 — Shape / envelope probe (is the model in the validated case?)
-
-Validated kernel envelope (from the B300 report): **SM103 · FP8 · head_dim=128 · dense MHA (q_heads=kv_heads)**. Values below read from the actual HF `transformer/config.json` (Wan, Hunyuan) — Cosmos config is gated, confirm on the box.
-
-| Model          | head_dim | heads (q / kv) | attn type | typical L (tokens) | target SM | in envelope? | plan |
-|----------------|:--------:|:--------------:|:---------:|:------------------:|:---------:|:------------:|------|
-| Wan 2.2 (T2V, A14B)   | **128** | **40 / 40** | **MHA** ✓ | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
-| Hunyuan Video 1.5 (T2V) | **128** | **16 / 16** | **MHA** ✓ | (compute per res) | SM103 | **yes** | native |
-| **Cosmos 3 Super 64B** (T2V/I2V/V2V) | 128 (confirm) | **q / kv — likely GQA** | **GQA?** | (compute) | SM103 | **⚠ verify** | see note |
-
-> **⚠ Cosmos 3 GQA finding:** the vllm-omni `transformer_cosmos3.py` attention takes `num_attention_heads` **and a separate `num_key_value_heads`**, projecting K/V with `num_kv_heads` — i.e. the arch is **GQA-capable** (Cosmos-Predict2 public is GQA). The B300 validation only covered **dense MHA**, so Cosmos is **not covered by that report**. The FlashInfer `trtllm_ragged_attention_deepseek` kernel is natively GQA/MQA (it's the DeepSeek path), so GQA likely runs — but **the SAGE per-block-scale layout + Skip predicate under GQA are untested**. Action: confirm Cosmos's actual `num_kv_heads` and validate SAGE+Skip on a GQA shape before trusting it; else fall back to flash-attn for Cosmos.
-
----
-
-## Table 1b — FlashInfer kernel validated-case micro-test
+## Table 1 — Phase 0 (optional): FlashInfer kernel validated-case micro-test
 
 Reproduce the B300 kernel report at the operating shape, at kernel level (no pipeline). Fixed shape from the report: **S=75600 · H=40 · D=128 · FP8 E4M3 · SM103**, single GPU + seed. Reference = the same kernel run **dense (Skip off)** — and, separately, a **full-precision (BF16) oracle** so we test accuracy vs truth, not just FI≈TRT.
 
@@ -132,3 +118,4 @@ Per model, run **BF16 dense** and **FP8-SAGE** on the **current backend** and on
 - E2E quality must be measured against **BF16 dense** — kernel parity (FI vs TRT) does **not** cover the runtime bf16→fp8 SAGE quant step.
 - Perf must be measured on the **target Blackwell SKU under realistic concurrency** — do not cite the isolated B300 kernel numbers.
 - If any model is not `head_dim=128 + dense MHA`, it is **outside the validated kernel envelope** even on SM103+FP8 → gate it out or request a kernel extension from DevTech (head_dim=64 / GQA).
+- **Cosmos 3 is GQA** (`transformer_cosmos3.py` has separate `num_key_value_heads`) → outside the dense-MHA validation. Kernel likely runs (trtllm-gen is natively GQA/MQA) but SAGE+Skip under GQA is untested — in Phase 1, just record whether trtgen runs or falls back.
