@@ -1,6 +1,6 @@
 # SAGE + Skip-Softmax — API Design & Test Plan
 
-# Part 1 — API Design
+## Part 1 — API Design
 
 *How the user uses the trtllm-gen backend.*
 
@@ -63,9 +63,9 @@ Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 
 ---
 
-# Part 2 — Testing Plan
+## Part 2 — Testing Plan
 
-## Models
+### Models
 
 | Model | HF checkpoint | params | shape |
 |-------|---------------|--------|-------|
@@ -75,7 +75,7 @@ Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 
 ---
 
-## ModelOpt skip calibration
+### ModelOpt skip calibration
 
 Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` → `config.json`. Steps 2–3 fix `target_sparsity`, sweep **D = `disabled_until_timestep`** (1.00 = off → 0.94 = most aggressive). D is a runtime gate, not calibrated.
 
@@ -105,7 +105,7 @@ Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_g
 
 ---
 
-## Step 1 — SAGE (FP8)
+### Step 1 — SAGE (FP8)
 
 FP8-SAGE only, no calibration. trtllm-gen vs current backend: LPIPS parity + speedup.
 
@@ -122,7 +122,7 @@ At BF16 dense: **trtgen == current backend** (LPIPS ≈ 0).
 
 ---
 
-## Step 2 — Skip-Softmax
+### Step 2 — Skip-Softmax
 
 Skip on BF16 attention (no SAGE). Fixed `target_sparsity` (→ factor); sweep **D = `disabled_until_timestep`**.
 
@@ -140,7 +140,7 @@ Skip on BF16 attention (no SAGE). Fixed `target_sparsity` (→ factor); sweep **
 
 ---
 
-## Step 3 — SAGE + Skip
+### Step 3 — SAGE + Skip
 
 FP8-SAGE + Skip. Same fixed `target_sparsity`; sweep **D = `disabled_until_timestep`**.
 
@@ -158,7 +158,7 @@ FP8-SAGE + Skip. Same fixed `target_sparsity`; sweep **D = `disabled_until_times
 
 ---
 
-## Step 4 — cross-backend comparison
+### Step 4 — cross-backend comparison
 
 Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA (= BF16 dense). Run per model (Wan / Hunyuan / Cosmos).
 
@@ -171,7 +171,7 @@ Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA (
 
 ---
 
-## Notes
+### Notes
 
 - SAGE = no calibration; Skip = per-model calibration.
 - LPIPS measured vs **BF16 dense**; perf on the **target Blackwell SKU under real concurrency**.
