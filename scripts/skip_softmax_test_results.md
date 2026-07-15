@@ -7,7 +7,7 @@ Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip → (4) cross-backend.**
 
 ## API design — how the user uses the trtllm-gen backend
 
-### 1. Just FP8-SAGE (minimal — one flag)
+### 1. trtllm-gen backend = BF16 dense (baseline)
 
 ```bash
 vllm-omni serve <model> --diffusion-attention-backend trtllm-gen
@@ -15,29 +15,34 @@ vllm-omni serve <model> --diffusion-attention-backend trtllm-gen
 export DIFFUSION_ATTENTION_BACKEND=trtllm-gen
 ```
 
-That's the whole thing — selecting `trtllm-gen` gives **FP8-SAGE on by default** (runtime, no calibration, no checkpoint change). To turn SAGE off: `--trtllm-gen-sage false`.
+Plain `trtllm-gen` runs **dense BF16 attention through the trtllm-gen kernel** — the baseline / parity backend (same math as SDPA → LPIPS ≈ 0 vs current backend). SAGE and Skip are **opt-in** on top.
 
-### 2. Add Skip-Softmax (needs a calibrated checkpoint)
+### 2. Add FP8-SAGE
+
+```bash
+vllm-omni serve <model> --diffusion-attention-backend trtllm-gen --trtllm-gen-sage
+# env: TRTLLM_GEN_SAGE=1
+```
+
+FP8-SAGE attention (runtime, dynamic, no calibration, no checkpoint change).
+
+### 3. Add Skip-Softmax (needs a calibrated checkpoint)
 
 ```bash
 vllm-omni serve <model> \
-  --diffusion-attention-backend trtllm-gen \
+  --diffusion-attention-backend trtllm-gen --trtllm-gen-sage \
   --trtllm-gen-skip-sparsity 0.5 \        # target_sparsity / fidelity D; omit = no skip
   --trtllm-gen-skip-disabled-until 0.6    # normalized timestep [0,1]; early steps stay dense
-# env equivalent:
-export DIFFUSION_ATTENTION_BACKEND=trtllm-gen
-export TRTLLM_GEN_SKIP_SPARSITY=0.5
-export TRTLLM_GEN_SKIP_DISABLED_UNTIL=0.6
 ```
 
 The `a,b` curve is read from the checkpoint (ModelOpt-calibrated); the user only picks sparsity. No calibrated checkpoint → skip stays off (dense).
 
-### 3. All knobs
+### 4. All knobs
 
 | CLI flag | env var | default | meaning |
 |----------|---------|:-------:|---------|
-| `--diffusion-attention-backend trtllm-gen` | `DIFFUSION_ATTENTION_BACKEND=trtllm-gen` | — | select backend |
-| `--trtllm-gen-sage {true,false}` | `TRTLLM_GEN_SAGE={1,0}` | `true` | FP8-SAGE on/off |
+| `--diffusion-attention-backend trtllm-gen` | `DIFFUSION_ATTENTION_BACKEND=trtllm-gen` | — | select backend (**BF16 dense**) |
+| `--trtllm-gen-sage` | `TRTLLM_GEN_SAGE=1` | **off** | turn on FP8-SAGE |
 | `--trtllm-gen-skip-sparsity <float>` | `TRTLLM_GEN_SKIP_SPARSITY` | unset (no skip) | target_sparsity / D |
 | `--trtllm-gen-skip-disabled-until <float>` | `TRTLLM_GEN_SKIP_DISABLED_UNTIL` | per-model preset | timestep gate [0,1] |
 
