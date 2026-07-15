@@ -2,11 +2,13 @@
 
 Fill these in during the vLLM-Omni integration. **Single backend under test: `trtllm` = FlashInfer trtllm-gen** (the only SAGE-capable path on B300). Features = `sage` (FP8-SAGE attention) + `skip_softmax`. SAGE attention on B300 is **FP8** (NVFP4 = GEMM/weight axis only). No cross-backend comparison here — trtllm-gen only.
 
-Baseline for all speedups = **BF16 compiled-dense**. Quality reference = **BF16 dense** (LPIPS/PSNR/SSIM measured against it).
+Baseline for all speedups = **BF16 dense**. **Primary quality metric = LPIPS ↓** vs the BF16-dense output (others optional).
 
-Quality metrics follow the video-acceleration convention (Sparse-vDiT / SVG2): reference-based **LPIPS ↓ (primary) / PSNR ↑ / SSIM ↑** vs the BF16-dense output, plus **VBench** for overall + temporal quality. Kernel-level (vs full-precision attention): **cosine sim / relative-L1 / RMSE** (SageAttention convention).
+**Phased — keep Phase 1 simple (NO calibration, NO skip):**
+- **Phase 1 (Table 2)** — backend verification. Per model, only **BF16 dense** and **FP8-SAGE** (SAGE is runtime/dynamic → **no ModelOpt calibration**). Compare **trtllm-gen vs current backend**: LPIPS parity + speedup. This proves the new backend works and FP8-SAGE's cost/quality.
+- **Phase 2 (Table 3, later)** — add **Skip-Softmax** at fidelity **D = 1.00 / 0.97 / 0.94**. Skip needs a threshold → **ModelOpt skip calibration per model** (each model has its own D→factor formula). Not started until Phase 1 passes.
 
-> **SCOPE — validated-kernel test only.** This run covers exactly the FlashInfer-validated case: **SM103 (B300) · FP8 E4M3 · head_dim=128 · dense MHA**. **NVFP4 and GQA are out of scope** (separate follow-up). In-envelope models: **Wan 2.2 (40/40 MHA)**, **Hunyuan 1.5 (16/16 MHA)**. **Cosmos 3 Super is GQA → not in the validated envelope**, so it is a follow-up item, not part of this test.
+> **Calibration:** SAGE = none. Skip = per-model ModelOpt calibration (or a manual factor). So Phase 1 needs zero calibration.
 
 ---
 
@@ -77,38 +79,34 @@ Gate: (a) accuracy vs BF16 oracle within budget (not just FI≈TRT); (b) net spe
 
 ---
 
-## Table 2 — E2E results (validated case: FP8, T2V @ 720p)
+## Table 2 — Phase 1: backend verification (no skip, no calibration)
 
-GEMM quant = **FP8** (the validated case, no NVFP4). Attention modes: `dense` (BF16 ref) / `FP8-SAGE` / `FP8-SAGE+Skip`. Only in-envelope models (Wan, Hunyuan).
+Per model, run **BF16 dense** and **FP8-SAGE** on the **current backend** and on **trtllm-gen**. Same prompt + seed. Primary check: **LPIPS parity (trtgen vs current) ≈ 0** and the FP8-SAGE speedup + quality.
 
-| Model | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | PSNR/SSIM/VBench | peak VRAM (GiB) | quality OK? | notes |
-|-------|:----------:|:---------:|:------------:|:---------------:|:---------------------:|:-----------------:|:-------:|:----------------:|:---------------:|:-----------:|-------|
-| Wan 2.2 | BF16 | dense (ref) |         |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
-| Wan 2.2 | FP8  | SAGE        |         |                 |                       | —                 |         |                  |                 |             |       |
-| Wan 2.2 | FP8  | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
-| Hunyuan 1.5 | BF16 | dense (ref) |     |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
-| Hunyuan 1.5 | FP8  | SAGE        |     |                 |                       | —                 |         |                  |                 |             |       |
-| Hunyuan 1.5 | FP8  | SAGE+Skip   |     |                 |                       |                   |         |                  |                 |             |       |
-
-**Cosmos 3 Super — out of scope for the validated-kernel test** (GQA, not in the SM103/FP8/D128/MHA envelope). Follow-up once GQA SAGE+Skip is validated.
+| Model | config | current-backend latency (s) | trtgen latency (s) | speedup | LPIPS (trtgen vs current) ↓ | LPIPS (vs BF16 dense) ↓ | notes |
+|-------|--------|:---------------------------:|:------------------:|:-------:|:---------------------------:|:-----------------------:|-------|
+| Wan 2.2 A14B | BF16 dense |        |        | 1.00× |        | 0 (ref) |  |
+| Wan 2.2 A14B | FP8-SAGE   |        |        |        |        |         |  |
+| Hunyuan 1.5  | BF16 dense |        |        | 1.00× |        | 0 (ref) |  |
+| Hunyuan 1.5  | FP8-SAGE   |        |        |        |        |         |  |
+| Cosmos 3 Super | BF16 dense |      |        | 1.00× |        | 0 (ref) | GQA — record if trtgen falls back |
+| Cosmos 3 Super | FP8-SAGE   |      |        |        |        |         | GQA — record if trtgen falls back |
 
 ---
 
-## Table 3 — Sparsity–fidelity sweep (per model → Pareto + pick default)
+## Table 3 — Phase 2 (later): Wan 2.2 A14B config × D sweep (needs calibration)
 
-Sweep at fixed GEMM quant (note which). `sparsity=0` = dense. Goal: find the knee and set the per-model default.
+**Only after Phase 1 passes.** Adds Skip-Softmax → **requires ModelOpt skip calibration for Wan** (D→threshold_scale_factor). Shape: **720×1080, 81 frames, 50 steps**. D = skip fidelity (1.00 = near-lossless/no skip → 0.94 = most aggressive).
 
-**Model: __________  ·  GEMM quant: __________  ·  res/frames: __________**
+| config | D = 1.00 |  | D = 0.97 |  | D = 0.94 |  |
+|--------|:--------:|:--:|:--------:|:--:|:--------:|:--:|
+| | **LPIPS ↓** | **speedup** | **LPIPS ↓** | **speedup** | **LPIPS ↓** | **speedup** |
+| BF16 (+Skip)        | 0 (ref) | 1.00× |  |  |  |  |
+| FP8 (+Skip)         |  |  |  |  |  |  |
+| BF16 + SAGE (+Skip) |  |  |  |  |  |  |
+| FP8 + SAGE (+Skip)  |  |  |  |  |  |  |
 
-| target_sparsity | disabled_until_timestep | achieved sparsity | Speedup | LPIPS ↓ | recommended default? |
-|:---------------:|:-----------------------:|:-----------------:|:-------:|:-------:|:--------------------:|
-| 0.0 (dense)     | —                       | 0                 | 1.00×   | 0 (ref) |                      |
-| 0.30            | 0.86                    |                   |         |         |                      |
-| 0.50            | 0.86                    |                   |         |         |                      |
-| 0.65            | 0.86                    |                   |         |         |                      |
-| 0.80            | 0.86                    |                   |         |         |                      |
-| 0.65            | 0.70                    |                   |         |         |                      |
-| 0.65            | 0.95                    |                   |         |         |                      |
+(Record achieved sparsity per cell in notes. Prereq: `quantize_wan_*_modelopt` skip-calibration produces Wan's D→factor formula.)
 
 ---
 
