@@ -5,7 +5,9 @@ Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip → (4) cross-backend.**
 
 ---
 
-## API design — how the user uses the trtllm-gen backend
+# Part 1 — API Design
+
+*How the user uses the trtllm-gen backend.*
 
 ### 1. trtllm-gen backend = BF16 dense (baseline)
 
@@ -55,6 +57,8 @@ The `a,b` curve is read from the checkpoint (ModelOpt-calibrated); the user only
 | `--trtllm-gen-skip-disabled-until` | — (DiT runtime; not in TRT-LLM's LLM config) | host-side gate, no kernel arg |
 
 ---
+
+# Part 2 — Testing Plan
 
 ## Models
 
