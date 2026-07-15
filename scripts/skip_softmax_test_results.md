@@ -47,6 +47,7 @@ Skip needs a **per-model** D → `threshold_scale_factor` curve. Calibration swe
 |-------|--------------|:-:|:-:|:--------------:|:--------------:|:--------------:|
 | Wan 2.2 |  |  |  |  |  |  |
 | Hunyuan 1.5 |  |  |  |  |  |  |
+| Cosmos 3 |  |  |  |  |  |  |
 
 ---
 
@@ -69,13 +70,19 @@ Also confirm: at BF16 dense, **trtgen output == current backend** (LPIPS ≈ 0).
 
 ## Step 2 — Skip-Softmax
 
-Skip on BF16 attention (isolate the skip effect). Uses the calibrated D → factor above. D = fidelity (1.00 ≈ no skip → 0.94 = most aggressive). Start with Wan.
+Skip on BF16 attention (isolate the skip effect). Uses the calibrated D → factor above. D = fidelity (1.00 ≈ no skip → 0.94 = most aggressive).
 
 | Model | D | LPIPS ↓ | speedup | achieved sparsity |
 |-------|:---:|:-------:|:-------:|:-----------------:|
 | Wan 2.2 | 1.00 | ~0 | ~1.00× | ~0 |
 | Wan 2.2 | 0.97 |    |        |    |
 | Wan 2.2 | 0.94 |    |        |    |
+| Hunyuan 1.5 | 1.00 | ~0 | ~1.00× | ~0 |
+| Hunyuan 1.5 | 0.97 |    |        |    |
+| Hunyuan 1.5 | 0.94 |    |        |    |
+| Cosmos 3 | 1.00 | ~0 | ~1.00× | ~0 |
+| Cosmos 3 | 0.97 |    |        |    |
+| Cosmos 3 | 0.94 |    |        |    |
 
 ---
 
@@ -88,6 +95,12 @@ Both together: FP8-SAGE + Skip at each D.
 | Wan 2.2 | 1.00 |    |        |    |
 | Wan 2.2 | 0.97 |    |        |    |
 | Wan 2.2 | 0.94 |    |        |    |
+| Hunyuan 1.5 | 1.00 |    |        |    |
+| Hunyuan 1.5 | 0.97 |    |        |    |
+| Hunyuan 1.5 | 0.94 |    |        |    |
+| Cosmos 3 | 1.00 |    |        |    |
+| Cosmos 3 | 0.97 |    |        |    |
+| Cosmos 3 | 0.94 |    |        |    |
 
 ## Notes
 
