@@ -41,19 +41,23 @@ The `a,b` curve is read from the checkpoint (ModelOpt-calibrated); the user only
 
 ### 4. All knobs
 
+TRT-LLM's runtime knob is **`threshold_scale_factor`** (via `SkipSoftmaxAttentionConfig`, kwarg `sparse_attention_config`). `target_sparsity` is only a *calibration* input (ModelOpt maps it → factor). So vLLM-Omni exposes `threshold-scale-factor` as the TRT-LLM-aligned primary, and `skip-sparsity` as a convenience that resolves to it via the checkpoint's calibrated `a,b`.
+
 | CLI flag | env var | default | meaning |
 |----------|---------|:-------:|---------|
 | `--diffusion-attention-backend trtllm-gen` | `DIFFUSION_ATTENTION_BACKEND=trtllm-gen` | — | select backend (**BF16 dense**) |
 | `--trtllm-gen-sage` | `TRTLLM_GEN_SAGE=1` | **off** | turn on FP8-SAGE |
-| `--trtllm-gen-skip-sparsity <float>` | `TRTLLM_GEN_SKIP_SPARSITY` | unset (no skip) | target_sparsity / D |
+| `--trtllm-gen-skip-threshold-scale-factor <float>` | `TRTLLM_GEN_SKIP_THRESHOLD_SCALE_FACTOR` | unset (no skip) | **TRT-LLM `threshold_scale_factor`** (direct) |
+| `--trtllm-gen-skip-sparsity <float>` | `TRTLLM_GEN_SKIP_SPARSITY` | unset | convenience → factor via calibrated `a,b` |
 | `--trtllm-gen-skip-disabled-until <float>` | `TRTLLM_GEN_SKIP_DISABLED_UNTIL` | per-model preset | timestep gate [0,1] |
 
 **Names map to upstream (reuse TRT-LLM / FlashInfer, don't invent):**
 
-| vLLM-Omni flag | TRT-LLM / ModelOpt | FlashInfer kernel arg |
-|----------------|--------------------|-----------------------|
-| `--trtllm-gen-sage` | `flash_skip_softmax` sibling — SAGE fp8 | `sage_block_sizes=(q,k,v)` + `bmm1_scale`/`bmm2_scale` (float32 per-block) |
-| `--trtllm-gen-skip-sparsity` | `sparse_attention_config: {algorithm: skip_softmax, target_sparsity}` | `skip_softmax_threshold_scale_factor = a·exp(b·sparsity)` (threshold = factor / seqlen) |
+| vLLM-Omni flag | TRT-LLM | FlashInfer kernel arg |
+|----------------|---------|-----------------------|
+| `--trtllm-gen-sage` | (separate axis; not in `SkipSoftmaxAttentionConfig`) | `sage_block_sizes=(q,k,v)` + `bmm1_scale`/`bmm2_scale` (float32 per-block) |
+| `--trtllm-gen-skip-threshold-scale-factor` | `SkipSoftmaxAttentionConfig(threshold_scale_factor=...)`, kwarg `sparse_attention_config` (float or `{prefill, decode}`) | `skip_softmax_threshold_scale_factor` (threshold = factor / seqlen) |
+| `--trtllm-gen-skip-sparsity` | not a runtime param — *calibration* input only (ModelOpt maps target_sparsity → threshold_scale_factor) | resolves to the same kernel arg via `a·exp(b·sparsity)` |
 | `--trtllm-gen-skip-disabled-until` | — (DiT runtime; not in TRT-LLM's LLM config) | host-side gate, no kernel arg |
 
 ---
