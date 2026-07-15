@@ -151,16 +151,14 @@ FP8-SAGE + Skip at each D.
 
 ## Step 4 — cross-backend comparison
 
-Fix one model + shape + seed, swap only the attention backend. Speedup vs current backend. Run per model (Wan / Hunyuan / Cosmos).
+Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA. Run per model (Wan / Hunyuan / Cosmos).
 
 | Backend | attention | LPIPS ↓ | speedup | notes |
 |---------|-----------|:-------:|:-------:|-------|
-| current (default) | dense     | 0 (ref) | 1.00× |  |
-| FLASH_ATTN_3      | dense     |         |        |  |
-| CUDNN_ATTN        | dense     |         |        |  |
-| FLASHINFER        | dense     |         |        |  |
-| **TRTLLM**        | FP8-SAGE      |     |        |  |
-| **TRTLLM**        | FP8-SAGE+Skip |     |        |  |
+| TORCH_SDPA                   | dense (ref)   | 0 (ref) | 1.00× | reference |
+| SAGE_ATTN (SageAttention 2) | FP8-SAGE      |         |        | runs on its supported SM |
+| **TRTLLM**                  | FP8-SAGE      |         |        |  |
+| **TRTLLM**                  | FP8-SAGE+Skip |         |        |  |
 
 ---
 
