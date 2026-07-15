@@ -11,21 +11,25 @@ Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip → (4) cross-backend.**
 
 ```bash
 # CLI
-vllm-omni serve <model> --diffusion-attention-backend TRTLLM_ATTN
+vllm-omni serve <model> --diffusion-attention-backend trtllm-gen
 # or env
-export DIFFUSION_ATTENTION_BACKEND=TRTLLM_ATTN
+export DIFFUSION_ATTENTION_BACKEND=trtllm-gen
+# or vLLM's generic config file (same keys):  --config serve.yaml
 ```
 
-`cuda/platform.py` gates it (mirrors `SAGE_ATTN_3`): needs **Blackwell SM≥100 + flashinfer + head_dim=128 dense MHA** → else falls back to SDPA/flash-attn with a one-line log. New enum member:
+No dedicated YAML schema — selection is the standard CLI flag / env var (both accepted via vLLM's `--config *.yaml`). New enum member + a hyphen-normalize so `trtllm-gen` maps to it:
 
 ```python
 # registry.py — DiffusionAttentionBackendEnum
-TRTLLM_ATTN = "vllm_omni.diffusion.attention.backends.trtllm_attn.TrtllmAttentionBackend"
+TRTLLM_GEN = "vllm_omni.diffusion.attention.backends.trtllm_attn.TrtllmAttentionBackend"
+# cuda/platform.py: backend_upper = selected_backend.upper().replace("-", "_")  # trtllm-gen -> TRTLLM_GEN
 ```
+
+`cuda/platform.py` gates it (mirrors `SAGE_ATTN_3`): needs **Blackwell SM≥100 + flashinfer + head_dim=128 dense MHA** → else falls back to SDPA/flash-attn with a one-line log.
 
 ### 2. SAGE — on by default
 
-Selecting `TRTLLM_ATTN` **already gives FP8-SAGE** (runtime, dynamic, no calibration, no checkpoint change). Nothing else to set.
+Selecting `trtllm-gen` **already gives FP8-SAGE** (runtime, dynamic, no calibration, no checkpoint change). Nothing else to set.
 
 ### 3. Skip-Softmax — opt-in (needs a calibrated checkpoint)
 
