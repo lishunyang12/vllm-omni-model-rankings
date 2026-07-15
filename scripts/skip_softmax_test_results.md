@@ -44,12 +44,14 @@ class TrtllmGenConfig:                 # mirrors TRT-LLM SkipSoftmaxAttentionCon
     disabled_until_timestep: float = 0.0        # keep initial (noisy) steps dense; per-model preset
 ```
 
-| CLI flag | env var | default | meaning |
-|----------|---------|:-------:|---------|
-| `--diffusion-attention-backend trtllm-gen` | `DIFFUSION_ATTENTION_BACKEND=trtllm-gen` | — | select backend (**BF16 dense**) |
-| `--trtllm-gen-sage` | `TRTLLM_GEN_SAGE=1` | **off** | FP8-SAGE |
-| `--trtllm-gen-target-sparsity <float>` | `TRTLLM_GEN_TARGET_SPARSITY` | unset (no skip) | skip amount; needs calibrated ckpt |
-| `--trtllm-gen-disabled-until-timestep <float>` | `TRTLLM_GEN_DISABLED_UNTIL_TIMESTEP` | per-model preset | keep initial noisy steps dense (fidelity guard); normalized denoise t 1→0 |
+| CLI flag | default | meaning |
+|----------|:-------:|---------|
+| `--diffusion-attention-backend trtllm-gen` | — | BF16 dense |
+| `--trtllm-gen-sage` | off | FP8-SAGE |
+| `--trtllm-gen-target-sparsity <float>` | unset | skip amount (needs calibrated ckpt) |
+| `--trtllm-gen-disabled-until-timestep <float>` | preset | keep initial steps dense (t 1→0) |
+
+Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 
 **Maps to upstream:**
 
