@@ -169,9 +169,3 @@ Fix one model + shape + seed, swap only the attention backend. Speedup vs SDPA (
 | **trtllm-gen**              | FP8-SAGE      |         |        |  |
 | **trtllm-gen**              | FP8-SAGE+Skip |         |        |  |
 
----
-
-### Notes
-
-- SAGE = no calibration; Skip = per-model calibration.
-- LPIPS measured vs **BF16 dense**; perf on the **target Blackwell SKU under real concurrency**.
