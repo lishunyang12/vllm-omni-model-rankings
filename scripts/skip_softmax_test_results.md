@@ -51,7 +51,7 @@ class TrtllmGenConfig:                 # mirrors TRT-LLM SkipSoftmaxAttentionCon
 | `--trtllm-gen-target-sparsity <float>` | `TRTLLM_GEN_TARGET_SPARSITY` | unset (no skip) | skip amount; needs calibrated ckpt |
 | `--trtllm-gen-disabled-until-timestep <float>` | `TRTLLM_GEN_DISABLED_UNTIL_TIMESTEP` | per-model preset | keep initial noisy steps dense (fidelity guard); normalized denoise t 1→0 |
 
-**Maps to upstream (don't invent):**
+**Maps to upstream:**
 
 | vLLM-Omni knob | TRT-LLM / ModelOpt | FlashInfer kernel arg |
 |----------------|--------------------|-----------------------|
