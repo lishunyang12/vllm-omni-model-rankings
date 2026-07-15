@@ -1,33 +1,34 @@
 # Skip-Softmax + SAGE Attention Backend — Test Results
 
-Fill these in during the vLLM-Omni integration. Backend = `trtllm` (FlashInfer trtllm-gen); features = `sage` (FP8-SAGE attention) + `skip_softmax`. Note: on B300, SAGE attention is **FP8** (NVFP4 = GEMM/weight axis only); the standalone SAGE_ATTN / SAGE_ATTN_3 backends do **not** run on B300.
+Fill these in during the vLLM-Omni integration. **Single backend under test: `trtllm` = FlashInfer trtllm-gen** (the only SAGE-capable path on B300). Features = `sage` (FP8-SAGE attention) + `skip_softmax`. SAGE attention on B300 is **FP8** (NVFP4 = GEMM/weight axis only). No cross-backend comparison here — trtllm-gen only.
 
 Baseline for all speedups = **BF16 compiled-dense**. Quality reference = **BF16 dense** (LPIPS/PSNR/SSIM measured against it).
 
 Quality metrics follow the video-acceleration convention (Sparse-vDiT / SVG2): reference-based **LPIPS ↓ (primary) / PSNR ↑ / SSIM ↑** vs the BF16-dense output, plus **VBench** for overall + temporal quality. Kernel-level (vs full-precision attention): **cosine sim / relative-L1 / RMSE** (SageAttention convention).
 
+> **SCOPE — validated-kernel test only.** This run covers exactly the FlashInfer-validated case: **SM103 (B300) · FP8 E4M3 · head_dim=128 · dense MHA**. **NVFP4 and GQA are out of scope** (separate follow-up). In-envelope models: **Wan 2.2 (40/40 MHA)**, **Hunyuan 1.5 (16/16 MHA)**. **Cosmos 3 Super is GQA → not in the validated envelope**, so it is a follow-up item, not part of this test.
+
 ---
 
 ## Record — models under test
 
-| Model | HF checkpoint | tested task / shape | attention | target SM |
-|-------|---------------|---------------------|-----------|-----------|
-| Wan 2.2 | `Wan-AI/Wan2.2-I2V-A14B-Diffusers` | I2V, 720p | 40/40, D128, **MHA** ✓ | SM103 (B300) |
-| Hunyuan Video 1.5 | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | T2V, 720p | 16/16, D128, **MHA** ✓ | SM103 (B300) |
-| Cosmos 3 Super | `nvidia/Cosmos3-Super` | T2V + I2V + V2V, 720p | D128, **GQA? ⚠ verify** | SM103 (B300) |
+| Model | HF checkpoint | params | task / shape | target SM |
+|-------|---------------|--------|--------------|-----------|
+| Wan 2.2 | `Wan-AI/Wan2.2-T2V-A14B-Diffusers` | 14B (A14B MoE) | T2V, 720p | SM103 (B300) |
+| Hunyuan Video 1.5 | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | 8.3B | T2V, 720p | SM103 (B300) |
+| Cosmos 3 Super | `nvidia/Cosmos3-Super` | 64B | T2V, 720p | SM103 (B300) |
 
 ---
 
 ## Model checkpoints (chosen)
 
-| Model | HF checkpoint | task(s) | default shape | notes |
-|-------|---------------|---------|---------------|-------|
-| **Wan 2.2 I2V** | `Wan-AI/Wan2.2-I2V-A14B-Diffusers` | I2V | 720p (or 480p), 5s | A14B MoE; H40/D128 = the FlashInfer B300 validated shape |
-| **Hunyuan Video 1.5** | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | T2V | 720p, 8.3B | 1.5 line; **FP8 E4M3 checkpoints already exist** (`hy15_720p_*_fp8_e4m3_lightx2v`) → feeds the FP8 arm directly. I2V = `...-720p_i2v` |
-| **Cosmos 3 Super 64B** | `nvidia/Cosmos3-Super` | **T2V + I2V + V2V** (unified) | 720p, 5s | vllm-omni `Cosmos3OmniDiffusersPipeline` + FP8 loader #5076 (per supported_models doc) |
-| Cheap-iter (Wan) | `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | TI2V | 720p | lighter shape for Wan sweeps / CI |
+| Model | HF checkpoint | params | task | default shape | notes |
+|-------|---------------|--------|------|---------------|-------|
+| **Wan 2.2** | `Wan-AI/Wan2.2-T2V-A14B-Diffusers` | 14B (A14B MoE) | T2V | 720p, 5s | H40/D128 = the FlashInfer B300 validated shape |
+| **Hunyuan Video 1.5** | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | 8.3B | T2V | 720p | **FP8 E4M3 checkpoints already exist** (`hy15_720p_t2v_fp8_e4m3_lightx2v`) → feeds the FP8 arm directly |
+| **Cosmos 3 Super** | `nvidia/Cosmos3-Super` | 64B | T2V | 720p, 5s | vllm-omni `Cosmos3OmniDiffusersPipeline` + FP8 loader #5076 (per supported_models doc) |
 
-**Task coverage:** Wan 2.2 = **I2V**; Hunyuan 1.5 = **T2V @ 720p only**; Cosmos 3 Super 64B = **T2V + I2V + V2V @ 720p only** (unified checkpoint, run each mode). Only the three primaries are in scope — **Cosmos = Super only, Hunyuan = 720p only** (no Nano / 480p runs). Wan may use TI2V-5B for cheap sparsity sweeps, then confirm on Wan I2V A14B.
+**Scope:** all three run **T2V @ 720p only**. Cosmos = Super only; Hunyuan = 720p only (no Nano / 480p runs).
 
 **vLLM-Omni pipelines (already in repo):**
 
@@ -46,7 +47,7 @@ Validated kernel envelope (from the B300 report): **SM103 · FP8 · head_dim=128
 
 | Model          | head_dim | heads (q / kv) | attn type | typical L (tokens) | target SM | in envelope? | plan |
 |----------------|:--------:|:--------------:|:---------:|:------------------:|:---------:|:------------:|------|
-| Wan 2.2 I2V A14B      | **128** | **40 / 40** | **MHA** ✓ | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
+| Wan 2.2 (T2V, A14B)   | **128** | **40 / 40** | **MHA** ✓ | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
 | Hunyuan Video 1.5 (T2V) | **128** | **16 / 16** | **MHA** ✓ | (compute per res) | SM103 | **yes** | native |
 | **Cosmos 3 Super 64B** (T2V/I2V/V2V) | 128 (confirm) | **q / kv — likely GQA** | **GQA?** | (compute) | SM103 | **⚠ verify** | see note |
 
@@ -54,24 +55,42 @@ Validated kernel envelope (from the B300 report): **SM103 · FP8 · head_dim=128
 
 ---
 
-## Table 2 — E2E results (operating points, per model)
+## Table 1b — FlashInfer kernel validated-case micro-test
 
-Fill one block per model×task. Modes: `dense` = baseline; `SAGE`; `SAGE+Skip`. GEMM quant: BF16 / FP8 / NVFP4. Tasks: Wan 2.2 = **I2V**; Hunyuan 1.5 = **T2V**; Cosmos 3 Super = **T2V / I2V / V2V** (one checkpoint, run each).
+Reproduce the B300 kernel report at the operating shape, at kernel level (no pipeline). Fixed shape from the report: **S=75600 · H=40 · D=128 · FP8 E4M3 · SM103**, single GPU + seed. Reference = the same kernel run **dense (Skip off)** — and, separately, a **full-precision (BF16) oracle** so we test accuracy vs truth, not just FI≈TRT.
 
-| Model | task | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | PSNR/SSIM/VBench | peak VRAM (GiB) | quality OK? | notes |
-|-------|:----:|:----------:|:---------:|:------------:|:---------------:|:---------------------:|:-----------------:|:-------:|:----------------:|:---------------:|:-----------:|-------|
-| Wan 2.2 | I2V | BF16  | dense (ref) |          |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
-| Wan 2.2 | I2V | FP8   | SAGE        |          |                 |                       | —                 |         |                  |                 |             |       |
-| Wan 2.2 | I2V | FP8   | SAGE+Skip   |          |                 |                       |                   |         |                  |                 |             |       |
-| Wan 2.2 | I2V | NVFP4 | SAGE+Skip   |          |                 |                       |                   |         |                  |                 |             |       |
-| Hunyuan 1.5 | T2V | BF16  | dense (ref) |      |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
-| Hunyuan 1.5 | T2V | FP8   | SAGE+Skip   |      |                 |                       |                   |         |                  |                 |             |       |
-| Hunyuan 1.5 | T2V | NVFP4 | SAGE+Skip   |      |                 |                       |                   |         |                  |                 |             |       |
-| Cosmos 3 | T2V | BF16  | dense (ref) |         |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
-| Cosmos 3 | T2V | FP8   | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
-| Cosmos 3 | I2V | FP8   | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
-| Cosmos 3 | V2V | FP8   | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
-| Cosmos 3 | T2V | NVFP4 | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
+| # | Attention mode | threshold θ (factor) | ref = | cosine sim ↑ | relative-L1 ↓ | RMSE ↓ | kernel time (ms) | speedup vs dense | achieved sparsity | PASS? |
+|---|----------------|:--------------------:|-------|:------------:|:-------------:|:------:|:----------------:|:----------------:|:-----------------:|:-----:|
+| 1 | FP8-SAGE (dense)      | — (skip off) | BF16 oracle |  |  |  |  | 1.00× | — |  |
+| 2 | FP8-SAGE + Skip @θ₁   | (deploy θ₁)  | BF16 oracle |  |  |  |  |  |  |  |
+| 3 | FP8-SAGE + Skip @θ₂   | (deploy θ₂)  | BF16 oracle |  |  |  |  |  |  |  |
+| 4 | FP8-SAGE + Skip @θ_hi | (high-sparsity) | BF16 oracle |  |  |  |  |  |  |  |
+
+Also record **concurrent** (multi-GPU) vs **isolated** kernel time for rows 2–3 (the report's concurrent run regressed) :
+
+| mode | isolated speedup vs dense | 4-GPU concurrent speedup | PASS (≥1.0× under concurrency)? |
+|------|:-------------------------:|:------------------------:|:-------------------------------:|
+| FP8-SAGE+Skip @θ₁ |  |  |  |
+| FP8-SAGE+Skip @θ₂ |  |  |  |
+
+Gate: (a) accuracy vs BF16 oracle within budget (not just FI≈TRT); (b) net speedup ≥ 1.0× **under concurrency**, not only isolated.
+
+---
+
+## Table 2 — E2E results (validated case: FP8, T2V @ 720p)
+
+GEMM quant = **FP8** (the validated case, no NVFP4). Attention modes: `dense` (BF16 ref) / `FP8-SAGE` / `FP8-SAGE+Skip`. Only in-envelope models (Wan, Hunyuan).
+
+| Model | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | PSNR/SSIM/VBench | peak VRAM (GiB) | quality OK? | notes |
+|-------|:----------:|:---------:|:------------:|:---------------:|:---------------------:|:-----------------:|:-------:|:----------------:|:---------------:|:-----------:|-------|
+| Wan 2.2 | BF16 | dense (ref) |         |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
+| Wan 2.2 | FP8  | SAGE        |         |                 |                       | —                 |         |                  |                 |             |       |
+| Wan 2.2 | FP8  | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
+| Hunyuan 1.5 | BF16 | dense (ref) |     |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
+| Hunyuan 1.5 | FP8  | SAGE        |     |                 |                       | —                 |         |                  |                 |             |       |
+| Hunyuan 1.5 | FP8  | SAGE+Skip   |     |                 |                       |                   |         |                  |                 |             |       |
+
+**Cosmos 3 Super — out of scope for the validated-kernel test** (GQA, not in the SM103/FP8/D128/MHA envelope). Follow-up once GQA SAGE+Skip is validated.
 
 ---
 
@@ -107,47 +126,6 @@ Sweep at fixed GEMM quant (note which). `sparsity=0` = dense. Goal: find the kne
 | 8 | negative / NaN / inf factor | — | rejected by API |  |  |
 | 9 | disabled_until_timestep phase | — | dense early steps, skip later; CUDA graphs keyed per phase |  |  |
 | 10 | achieved sparsity realizes target | sparsity=0.65 | achieved ≈ target (within budget) |  |  |
-
----
-
-## Table 5 — Attention backend capability matrix (factual, fill "runs on B300?")
-
-Existing vLLM-Omni diffusion backends vs the new `trtllm`. This frames *why* only some are comparable on Blackwell.
-
-| Backend            | lib / path                    | target SM        | attention dtype      | SAGE | Skip | GQA | runs on B300? |
-|--------------------|-------------------------------|------------------|----------------------|:----:|:----:|:---:|:-------------:|
-| FLASH_ATTN         | flash-attn                    | 80+              | BF16 / FP16          |  no  |  no  | yes |               |
-| FLASH_ATTN_3_HUB   | FA3                           | 90 / 100         | BF16 / FP16          |  no  |  no  | yes |               |
-| TORCH_SDPA         | torch SDPA                    | any              | BF16 / FP16          |  no  |  no  | yes |               |
-| CUDNN_ATTN         | cuDNN fused                   | 90 / 100         | BF16 / FP16          |  no  |  no  | yes |               |
-| FLASHINFER_ATTN    | flashinfer (default path)     | 80+              | BF16 / FP16          |  no  |  no  | yes |               |
-| SAGE_ATTN          | `sageattention`               | **80–90 only**   | FP8 / INT8           | yes  |  no  | yes | **no** (SM)   |
-| SAGE_ATTN_3        | `sageattn3`                   | **120-focused**  | FP8                  | yes  |  no  | **no** | **no** (SM/GQA) |
-| **TRTLLM (new)**   | FlashInfer trtllm-gen         | **100+**         | FP8 E4M3 (SAGE)      | yes  | yes  | *(fallback if GQA)* | **yes** |
-
-Takeaway to confirm on the box: on B300 the only SAGE-capable path is **TRTLLM**; SAGE_ATTN / SAGE_ATTN_3 are out (SM / GQA). Dense baselines = FLASH_ATTN / FA3 / cuDNN / FLASHINFER.
-
----
-
-## Table 6 — Cross-backend head-to-head (vertical perf comparison)
-
-**Fix one model + shape + prompt + seed**, swap only the attention backend. Baseline for speedup = **FLASH_ATTN** (dense). LPIPS measured vs BF16-dense output.
-
-**Model: __________  ·  res/frames: __________  ·  GEMM quant: __________  ·  SM/GPU: __________**
-
-| Backend              | attention mode  | E2E latency (s) | attn kernel time (ms) | speedup vs FLASH_ATTN | achieved sparsity | LPIPS ↓ | peak VRAM (GiB) | notes |
-|----------------------|-----------------|:---------------:|:---------------------:|:---------------------:|:-----------------:|:-------:|:---------------:|-------|
-| FLASH_ATTN           | dense (ref)     |                 |                       | 1.00×                 | —                 | 0 (ref) |                 |       |
-| FLASH_ATTN_3_HUB     | dense           |                 |                       |                       | —                 |         |                 |       |
-| CUDNN_ATTN           | dense           |                 |                       |                       | —                 |         |                 |       |
-| FLASHINFER_ATTN      | dense           |                 |                       |                       | —                 |         |                 |       |
-| TORCH_SDPA           | dense           |                 |                       |                       | —                 |         |                 |       |
-| SAGE_ATTN            | FP8-SAGE        | n/a (SM)        | n/a                   | n/a                   | —                 | n/a     | n/a             | not on B300 |
-| SAGE_ATTN_3          | FP8-SAGE        | n/a (SM/GQA)    | n/a                   | n/a                   | —                 | n/a     | n/a             | not on B300 |
-| **TRTLLM**           | FP8-SAGE        |                 |                       |                       | —                 |         |                 |       |
-| **TRTLLM**           | FP8-SAGE + Skip |                 |                       |                       |                   |         |                 |       |
-
-Run the same block per model (Wan 2.2 / Hunyuan / Cosmos 3). This isolates the attention win: `attn kernel time` column shows where the backends actually differ; `E2E` shows what survives the rest of the pipeline.
 
 ---
 
