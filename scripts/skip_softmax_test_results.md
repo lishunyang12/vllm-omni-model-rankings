@@ -73,6 +73,47 @@ Sweep at fixed GEMM quant (note which). `sparsity=0` = dense. Goal: find the kne
 
 ---
 
+## Table 5 — Attention backend capability matrix (factual, fill "runs on B300?")
+
+Existing vLLM-Omni diffusion backends vs the new `trtllm`. This frames *why* only some are comparable on Blackwell.
+
+| Backend            | lib / path                    | target SM        | attention dtype      | SAGE | Skip | GQA | runs on B300? |
+|--------------------|-------------------------------|------------------|----------------------|:----:|:----:|:---:|:-------------:|
+| FLASH_ATTN         | flash-attn                    | 80+              | BF16 / FP16          |  no  |  no  | yes |               |
+| FLASH_ATTN_3_HUB   | FA3                           | 90 / 100         | BF16 / FP16          |  no  |  no  | yes |               |
+| TORCH_SDPA         | torch SDPA                    | any              | BF16 / FP16          |  no  |  no  | yes |               |
+| CUDNN_ATTN         | cuDNN fused                   | 90 / 100         | BF16 / FP16          |  no  |  no  | yes |               |
+| FLASHINFER_ATTN    | flashinfer (default path)     | 80+              | BF16 / FP16          |  no  |  no  | yes |               |
+| SAGE_ATTN          | `sageattention`               | **80–90 only**   | FP8 / INT8           | yes  |  no  | yes | **no** (SM)   |
+| SAGE_ATTN_3        | `sageattn3`                   | **120-focused**  | FP8                  | yes  |  no  | **no** | **no** (SM/GQA) |
+| **TRTLLM (new)**   | FlashInfer trtllm-gen         | **100+**         | FP8 E4M3 (SAGE)      | yes  | yes  | *(fallback if GQA)* | **yes** |
+
+Takeaway to confirm on the box: on B300 the only SAGE-capable path is **TRTLLM**; SAGE_ATTN / SAGE_ATTN_3 are out (SM / GQA). Dense baselines = FLASH_ATTN / FA3 / cuDNN / FLASHINFER.
+
+---
+
+## Table 6 — Cross-backend head-to-head (vertical perf comparison)
+
+**Fix one model + shape + prompt + seed**, swap only the attention backend. Baseline for speedup = **FLASH_ATTN** (dense). LPIPS measured vs BF16-dense output.
+
+**Model: __________  ·  res/frames: __________  ·  GEMM quant: __________  ·  SM/GPU: __________**
+
+| Backend              | attention mode  | E2E latency (s) | attn kernel time (ms) | speedup vs FLASH_ATTN | achieved sparsity | LPIPS ↓ | peak VRAM (GiB) | notes |
+|----------------------|-----------------|:---------------:|:---------------------:|:---------------------:|:-----------------:|:-------:|:---------------:|-------|
+| FLASH_ATTN           | dense (ref)     |                 |                       | 1.00×                 | —                 | 0 (ref) |                 |       |
+| FLASH_ATTN_3_HUB     | dense           |                 |                       |                       | —                 |         |                 |       |
+| CUDNN_ATTN           | dense           |                 |                       |                       | —                 |         |                 |       |
+| FLASHINFER_ATTN      | dense           |                 |                       |                       | —                 |         |                 |       |
+| TORCH_SDPA           | dense           |                 |                       |                       | —                 |         |                 |       |
+| SAGE_ATTN            | FP8-SAGE        | n/a (SM)        | n/a                   | n/a                   | —                 | n/a     | n/a             | not on B300 |
+| SAGE_ATTN_3          | FP8-SAGE        | n/a (SM/GQA)    | n/a                   | n/a                   | —                 | n/a     | n/a             | not on B300 |
+| **TRTLLM**           | FP8-SAGE        |                 |                       |                       | —                 |         |                 |       |
+| **TRTLLM**           | FP8-SAGE + Skip |                 |                       |                       |                   |         |                 |       |
+
+Run the same block per model (Wan 2.2 / Hunyuan / Cosmos 3). This isolates the attention win: `attn kernel time` column shows where the backends actually differ; `E2E` shows what survives the rest of the pipeline.
+
+---
+
 ## Notes / caveats to record
 
 - E2E quality must be measured against **BF16 dense** — kernel parity (FI vs TRT) does **not** cover the runtime bf16→fp8 SAGE quant step.
