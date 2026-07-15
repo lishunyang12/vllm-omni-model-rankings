@@ -46,6 +46,14 @@ The `a,b` curve is read from the checkpoint (ModelOpt-calibrated); the user only
 | `--trtllm-gen-skip-sparsity <float>` | `TRTLLM_GEN_SKIP_SPARSITY` | unset (no skip) | target_sparsity / D |
 | `--trtllm-gen-skip-disabled-until <float>` | `TRTLLM_GEN_SKIP_DISABLED_UNTIL` | per-model preset | timestep gate [0,1] |
 
+**Names map to upstream (reuse TRT-LLM / FlashInfer, don't invent):**
+
+| vLLM-Omni flag | TRT-LLM / ModelOpt | FlashInfer kernel arg |
+|----------------|--------------------|-----------------------|
+| `--trtllm-gen-sage` | `flash_skip_softmax` sibling — SAGE fp8 | `sage_block_sizes=(q,k,v)` + `bmm1_scale`/`bmm2_scale` (float32 per-block) |
+| `--trtllm-gen-skip-sparsity` | `sparse_attention_config: {algorithm: skip_softmax, target_sparsity}` | `skip_softmax_threshold_scale_factor = a·exp(b·sparsity)` (threshold = factor / seqlen) |
+| `--trtllm-gen-skip-disabled-until` | — (DiT runtime; not in TRT-LLM's LLM config) | host-side gate, no kernel arg |
+
 No dedicated YAML — these are standard CLI flags / env vars (also settable via vLLM's generic `--config *.yaml`). Enum member + hyphen-normalize:
 
 ```python
