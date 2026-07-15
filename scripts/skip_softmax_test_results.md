@@ -8,6 +8,16 @@ Quality metrics follow the video-acceleration convention (Sparse-vDiT / SVG2): r
 
 ---
 
+## Record — models under test
+
+| Model | HF checkpoint | tested task / shape | attention | target SM |
+|-------|---------------|---------------------|-----------|-----------|
+| Wan 2.2 | `Wan-AI/Wan2.2-I2V-A14B-Diffusers` | I2V, 720p | 40/40, D128, **MHA** ✓ | SM103 (B300) |
+| Hunyuan Video 1.5 | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | T2V, 720p | 16/16, D128, **MHA** ✓ | SM103 (B300) |
+| Cosmos 3 Super | `nvidia/Cosmos3-Super` | T2V + I2V + V2V, 720p | D128, **GQA? ⚠ verify** | SM103 (B300) |
+
+---
+
 ## Model checkpoints (chosen)
 
 | Model | HF checkpoint | task(s) | default shape | notes |
