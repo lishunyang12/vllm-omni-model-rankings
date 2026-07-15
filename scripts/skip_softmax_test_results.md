@@ -1,5 +1,7 @@
 # SAGE + Skip-Softmax — API Design & Test Plan
 
+**Target: merge by 2026-07-24 for the v0.26.0 release.**
+
 ## Part 1 — API Design
 
 *How the user uses the trtllm-gen backend.*
