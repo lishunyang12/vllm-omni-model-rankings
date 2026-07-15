@@ -65,7 +65,7 @@ Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 
 ## Part 2 — Testing Plan
 
-Hardware: **SM103 (B300)**.
+Hardware: **SM103 (B300)**. Versions: **vLLM-Omni v0.24.1 · FlashInfer 0.6.5 · ModelOpt 0.44.0**.
 
 ### Models
 
