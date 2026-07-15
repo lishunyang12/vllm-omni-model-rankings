@@ -77,8 +77,6 @@ Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 
 ### ModelOpt skip calibration
 
-Sweep `target_sparsity`, fit `factor = a·exp(b·target_sparsity)` per `config_group` → `config.json`. Steps 2–3 fix `target_sparsity`, sweep **D = `disabled_until_timestep`** (1.00 = off → 0.94 = most aggressive). D is a runtime gate, not calibrated.
-
 **Setup** (per model)
 
 | Model | calib prompts | # samples | res / frames | config_groups | ignore layers |
