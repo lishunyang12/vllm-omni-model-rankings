@@ -10,15 +10,16 @@ Quality metrics follow the video-acceleration convention (Sparse-vDiT / SVG2): r
 
 ## Model checkpoints (chosen)
 
-| Model | HF checkpoint | variant | default shape | notes |
+| Model | HF checkpoint | task(s) | default shape | notes |
 |-------|---------------|---------|---------------|-------|
-| **Wan 2.2** | `Wan-AI/Wan2.2-T2V-A14B-Diffusers` | T2V, A14B MoE | 720p, 5s @ ~16fps | **primary** — this is the deck's Wan 2.2; H40/D128 = the FlashInfer B300 validated shape |
-| Wan 2.2 (cheap iter) | `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | TI2V, 5B | 720p @ 24fps | lighter shape for fast sweeps / CI |
-| **Hunyuan Video** | `hunyuanvideo-community/HunyuanVideo` | T2V | 720p×1280, 129f | diffusers layout (community repo); the standard T2V baseline |
-| **Cosmos 3** | `nvidia/Cosmos-Predict2.5-14B` | Predict2.5, T2V/I2V/V2V | 720×1280, 189f | vllm-omni Cosmos3 pipeline; matches FP8 loader #5076 |
-| Cosmos 3 (cheap iter) | `nvidia/Cosmos-Predict2.5-2B` | Predict2.5, 2B | 720×1280 | fast iteration / CI before the 14B run |
+| **Wan 2.2 I2V** | `Wan-AI/Wan2.2-I2V-A14B-Diffusers` | I2V | 720p (or 480p), 5s | A14B MoE; H40/D128 = the FlashInfer B300 validated shape |
+| **Hunyuan Video 1.5** | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-720p_t2v` | T2V | 720p, 8.3B | 1.5 line; **FP8 E4M3 checkpoints already exist** (`hy15_720p_*_fp8_e4m3_lightx2v`) → feeds the FP8 arm directly. I2V = `...-720p_i2v` |
+| **Cosmos 3 Super** | `nvidia/Cosmos-Predict2.5-14B` | **T2V + I2V + V2V** (unified) | 720p = 1280×704, 16fps, 5s (~80f) | one checkpoint runs all three modes; matches vllm-omni Cosmos3 + FP8 loader #5076. "Super" = 14B/720p post-trained |
+| Cheap-iter (Wan) | `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | TI2V | 720p | lighter shape for sweeps / CI |
+| Cheap-iter (Hunyuan) | `hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_t2v` | T2V | 480p | fast sweeps / CI |
+| Cheap-iter (Cosmos) | `nvidia/Cosmos-Predict2.5-2B` | T2V/I2V/V2V | 480p (832×480) | fast iteration before the 14B run |
 
-Iterate the sparsity/timestep sweep on the light checkpoints (TI2V-5B, Cosmos 2B), then confirm the operating point + quality gate on the primaries (A14B, Hunyuan, Cosmos 14B).
+**Task coverage:** Wan 2.2 = **I2V**; Hunyuan 1.5 = **T2V** (I2V variant available); Cosmos 3 Super = **T2V + I2V + V2V** (unified checkpoint, run each mode). Iterate the sparsity/timestep sweep on the light checkpoints (TI2V-5B, Hunyuan 480p, Cosmos 2B), then confirm the operating point + quality gate on the primaries (Wan I2V A14B, Hunyuan 1.5 720p, Cosmos 14B).
 
 ---
 
@@ -28,31 +29,32 @@ Validated kernel envelope: **SM103 (B300) · FP8 · head_dim=128 · dense MHA (q
 
 | Model          | head_dim | heads (q / kv) | attn type | typical L (tokens) | target SM | in envelope? | plan |
 |----------------|:--------:|:--------------:|:---------:|:------------------:|:---------:|:------------:|------|
-| Wan 2.2 A14B (T2V) | 128 | 40 / 40 | MHA | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
-| Wan 2.2 TI2V-5B    | 128 (confirm) | 24 / 24 (confirm) | MHA | (compute) | SM103 | yes (confirm) | native |
-| Hunyuan Video (T2V)| 128 | 24 / 24 | MHA | (compute per res) | SM103 | **yes** | native |
-| Cosmos Predict2.5-14B | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
-| Cosmos Predict2.5-2B  | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
+| Wan 2.2 I2V A14B      | 128 | 40 / 40 | MHA | ~75,600 @720p | SM103 | **yes** (= validated shape) | native |
+| Hunyuan Video 1.5 (T2V) | 128 (confirm) | (confirm) | MHA (confirm) | (compute per res) | SM103 | yes (confirm) | native |
+| Cosmos 3 Super 14B (T2V/I2V/V2V) | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
+| Wan 2.2 TI2V-5B (iter)   | 128 (confirm) | 24 / 24 (confirm) | MHA | (compute) | SM103 | yes (confirm) | native |
+| Cosmos 3 2B (iter)       | 128 (confirm) | (confirm) | MHA (confirm) | (compute) | SM103 | yes (confirm) | native |
 
 ---
 
 ## Table 2 — E2E results (operating points, per model)
 
-Fill one block per model. Modes: `dense` = baseline; `SAGE`; `SAGE+Skip`. GEMM quant: BF16 / FP8 / NVFP4.
+Fill one block per model×task. Modes: `dense` = baseline; `SAGE`; `SAGE+Skip`. GEMM quant: BF16 / FP8 / NVFP4. Tasks: Wan 2.2 = **I2V**; Hunyuan 1.5 = **T2V**; Cosmos 3 Super = **T2V / I2V / V2V** (one checkpoint, run each).
 
-| Model | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | PSNR/SSIM/VBench | peak VRAM (GiB) | quality OK? | notes |
-|-------|:----------:|:---------:|:------------:|:---------------:|:---------------------:|:-----------------:|:-------:|:-------------:|:---------------:|:-----------:|-------|
-| Wan 2.2 | BF16  | dense (ref) |            |                 | 1.00×                 | —                 | 0 (ref) | ref           |                 | ref         |       |
-| Wan 2.2 | FP8   | SAGE        |            |                 |                       | —                 |         |               |                 |             |       |
-| Wan 2.2 | FP8   | SAGE+Skip   |            |                 |                       |                   |         |               |                 |             |       |
-| Wan 2.2 | NVFP4 | SAGE        |            |                 |                       | —                 |         |               |                 |             |       |
-| Wan 2.2 | NVFP4 | SAGE+Skip   |            |                 |                       |                   |         |               |                 |             |       |
-| Hunyuan | BF16  | dense (ref) |            |                 | 1.00×                 | —                 | 0 (ref) | ref           |                 | ref         |       |
-| Hunyuan | FP8   | SAGE+Skip   |            |                 |                       |                   |         |               |                 |             |       |
-| Hunyuan | NVFP4 | SAGE+Skip   |            |                 |                       |                   |         |               |                 |             |       |
-| Cosmos 3| BF16  | dense (ref) |            |                 | 1.00×                 | —                 | 0 (ref) | ref           |                 | ref         |       |
-| Cosmos 3| FP8   | SAGE+Skip   |            |                 |                       |                   |         |               |                 |             |       |
-| Cosmos 3| NVFP4 | SAGE+Skip   |            |                 |                       |                   |         |               |                 |             |       |
+| Model | task | GEMM quant | Attention | res / frames | E2E latency (s) | Speedup vs BF16-dense | achieved sparsity | LPIPS ↓ | PSNR/SSIM/VBench | peak VRAM (GiB) | quality OK? | notes |
+|-------|:----:|:----------:|:---------:|:------------:|:---------------:|:---------------------:|:-----------------:|:-------:|:----------------:|:---------------:|:-----------:|-------|
+| Wan 2.2 | I2V | BF16  | dense (ref) |          |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
+| Wan 2.2 | I2V | FP8   | SAGE        |          |                 |                       | —                 |         |                  |                 |             |       |
+| Wan 2.2 | I2V | FP8   | SAGE+Skip   |          |                 |                       |                   |         |                  |                 |             |       |
+| Wan 2.2 | I2V | NVFP4 | SAGE+Skip   |          |                 |                       |                   |         |                  |                 |             |       |
+| Hunyuan 1.5 | T2V | BF16  | dense (ref) |      |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
+| Hunyuan 1.5 | T2V | FP8   | SAGE+Skip   |      |                 |                       |                   |         |                  |                 |             |       |
+| Hunyuan 1.5 | T2V | NVFP4 | SAGE+Skip   |      |                 |                       |                   |         |                  |                 |             |       |
+| Cosmos 3 | T2V | BF16  | dense (ref) |         |                 | 1.00×                 | —                 | 0 (ref) | ref              |                 | ref         |       |
+| Cosmos 3 | T2V | FP8   | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
+| Cosmos 3 | I2V | FP8   | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
+| Cosmos 3 | V2V | FP8   | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
+| Cosmos 3 | T2V | NVFP4 | SAGE+Skip   |         |                 |                       |                   |         |                  |                 |             |       |
 
 ---
 
