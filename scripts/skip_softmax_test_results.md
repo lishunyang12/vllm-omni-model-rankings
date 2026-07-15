@@ -1,10 +1,5 @@
 # SAGE + Skip-Softmax — API Design & Test Plan
 
-Backend: **trtllm-gen** (FlashInfer). Primary metric: **LPIPS ↓** vs BF16 dense. Speedup vs BF16 dense.
-Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip → (4) cross-backend.**
-
----
-
 # Part 1 — API Design
 
 *How the user uses the trtllm-gen backend.*
