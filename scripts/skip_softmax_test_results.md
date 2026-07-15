@@ -65,6 +65,8 @@ Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 
 ## Part 2 — Testing Plan
 
+Hardware: **SM103 (B300)**.
+
 ### Models
 
 | Model | HF checkpoint | params | shape |
