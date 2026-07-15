@@ -13,50 +13,9 @@ Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip.**
 
 ---
 
-## Step 1 — SAGE (FP8)
-
-Just FP8-SAGE attention. **No calibration** (SAGE is dynamic). Compare trtllm-gen vs current backend; check LPIPS parity + speedup.
-
-| Model | config | LPIPS ↓ | speedup | notes |
-|-------|--------|:-------:|:-------:|-------|
-| Wan 2.2 | BF16 dense (ref) | 0 (ref) | 1.00× |  |
-| Wan 2.2 | FP8-SAGE         |         |        |  |
-| Hunyuan 1.5 | BF16 dense (ref) | 0 (ref) | 1.00× |  |
-| Hunyuan 1.5 | FP8-SAGE     |         |        |  |
-| Cosmos 3 | BF16 dense (ref) | 0 (ref) | 1.00× | GQA |
-| Cosmos 3 | FP8-SAGE        |         |        | GQA — record if it falls back |
-
-Also confirm: at BF16 dense, **trtgen output == current backend** (LPIPS ≈ 0).
-
----
-
-## Step 2 — Skip-Softmax
-
-Skip on BF16 attention (isolate the skip effect). **Needs ModelOpt skip calibration per model** (D → threshold). D = fidelity (1.00 ≈ no skip → 0.94 = most aggressive). Start with Wan.
-
-| Model | D | LPIPS ↓ | speedup | achieved sparsity |
-|-------|:---:|:-------:|:-------:|:-----------------:|
-| Wan 2.2 | 1.00 | ~0 | ~1.00× | ~0 |
-| Wan 2.2 | 0.97 |    |        |    |
-| Wan 2.2 | 0.94 |    |        |    |
-
----
-
-## Step 3 — SAGE + Skip
-
-Both together: FP8-SAGE + Skip at each D.
-
-| Model | D | LPIPS ↓ | speedup | achieved sparsity |
-|-------|:---:|:-------:|:-------:|:-----------------:|
-| Wan 2.2 | 1.00 |    |        |    |
-| Wan 2.2 | 0.97 |    |        |    |
-| Wan 2.2 | 0.94 |    |        |    |
-
----
-
 ## ModelOpt skip calibration (prereq for Steps 2–3)
 
-Skip needs a **per-model** D → `threshold_scale_factor` curve. Calibration sweeps `target_sparsity` on a fine grid, measures achieved sparsity + LPIPS at each point, and fits `factor = a·exp(b·target_sparsity)` **per `config_group`** (written into checkpoint `config.json`, `ignore` layers kept dense). The 3 D points in Steps 2–3 are operating points read off this curve.
+Skip needs a **per-model** D → `threshold_scale_factor` curve. Calibration sweeps `target_sparsity` on a fine grid, measures achieved sparsity + LPIPS at each point, and fits `factor = a·exp(b·target_sparsity)` **per `config_group`** (written into checkpoint `config.json`, `ignore` layers kept dense). The 3 D points used in Steps 2–3 are operating points read off this curve. (SAGE needs no calibration → Step 1 can start without this.)
 
 **Setup** (per model)
 
@@ -88,6 +47,47 @@ Skip needs a **per-model** D → `threshold_scale_factor` curve. Calibration swe
 |-------|--------------|:-:|:-:|:--------------:|:--------------:|:--------------:|
 | Wan 2.2 |  |  |  |  |  |  |
 | Hunyuan 1.5 |  |  |  |  |  |  |
+
+---
+
+## Step 1 — SAGE (FP8)
+
+Just FP8-SAGE attention. **No calibration** (SAGE is dynamic). Compare trtllm-gen vs current backend; check LPIPS parity + speedup.
+
+| Model | config | LPIPS ↓ | speedup | notes |
+|-------|--------|:-------:|:-------:|-------|
+| Wan 2.2 | BF16 dense (ref) | 0 (ref) | 1.00× |  |
+| Wan 2.2 | FP8-SAGE         |         |        |  |
+| Hunyuan 1.5 | BF16 dense (ref) | 0 (ref) | 1.00× |  |
+| Hunyuan 1.5 | FP8-SAGE     |         |        |  |
+| Cosmos 3 | BF16 dense (ref) | 0 (ref) | 1.00× | GQA |
+| Cosmos 3 | FP8-SAGE        |         |        | GQA — record if it falls back |
+
+Also confirm: at BF16 dense, **trtgen output == current backend** (LPIPS ≈ 0).
+
+---
+
+## Step 2 — Skip-Softmax
+
+Skip on BF16 attention (isolate the skip effect). Uses the calibrated D → factor above. D = fidelity (1.00 ≈ no skip → 0.94 = most aggressive). Start with Wan.
+
+| Model | D | LPIPS ↓ | speedup | achieved sparsity |
+|-------|:---:|:-------:|:-------:|:-----------------:|
+| Wan 2.2 | 1.00 | ~0 | ~1.00× | ~0 |
+| Wan 2.2 | 0.97 |    |        |    |
+| Wan 2.2 | 0.94 |    |        |    |
+
+---
+
+## Step 3 — SAGE + Skip
+
+Both together: FP8-SAGE + Skip at each D.
+
+| Model | D | LPIPS ↓ | speedup | achieved sparsity |
+|-------|:---:|:-------:|:-------:|:-----------------:|
+| Wan 2.2 | 1.00 |    |        |    |
+| Wan 2.2 | 0.97 |    |        |    |
+| Wan 2.2 | 0.94 |    |        |    |
 
 ## Notes
 
