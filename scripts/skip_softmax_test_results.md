@@ -61,13 +61,13 @@ Env var = flag in UPPER_SNAKE (e.g. `TRTLLM_GEN_SAGE=1`).
 | `target_sparsity` | `threshold_scale_factor` (via calibration) | `skip_softmax_threshold_scale_factor` |
 | `disabled_until_timestep` | — (DiT-only) | host gate |
 
-Versions: **FlashInfer 0.6.5 · ModelOpt 0.44.0** (runtime deps); TRT-LLM = naming reference (blog16, no runtime dep).
+Versions: **FlashInfer 0.6.14 · ModelOpt 0.45.0** (runtime deps); TRT-LLM = naming reference (blog16, no runtime dep).
 
 ---
 
 ## Part 2 — Testing Plan
 
-Hardware: **SM103 (B300)**. Versions: **vLLM-Omni v0.24.1 · FlashInfer 0.6.5 · ModelOpt 0.44.0**.
+Hardware: **SM103 (B300)**. Versions: **vLLM-Omni v0.25.0 · FlashInfer 0.6.14 · ModelOpt 0.45.0**.
 
 ### Models
 
