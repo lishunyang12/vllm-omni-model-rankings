@@ -116,7 +116,7 @@ FP8-SAGE only, no calibration. trtllm-gen vs current backend: LPIPS parity + spe
 | Cosmos 3 | BF16 dense (ref) | 0 (ref) | 1.00× |  |
 | Cosmos 3 | FP8-SAGE        |         |        |  |
 
-At BF16 dense: **trtgen == current backend** (LPIPS ≈ 0).
+At BF16 dense: **trtllm-gen == current backend** (LPIPS ≈ 0).
 
 ---
 
