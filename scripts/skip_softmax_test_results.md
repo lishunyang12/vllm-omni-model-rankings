@@ -7,50 +7,79 @@ Order: **(1) SAGE → (2) Skip → (3) SAGE + Skip → (4) cross-backend.**
 
 ## API design
 
-**User config**
+### Who controls what
+
+| Knob | Set by | Where |
+|------|--------|-------|
+| FP8 / NVFP4 **GEMM weights** | **ModelOpt** (offline quant) | checkpoint weights (loader #5076/#5087) |
+| **Skip threshold curve** `a, b` (D→factor) | **ModelOpt** (skip calibration) | checkpoint `config.json → sparse_attention_config` |
+| **config_groups + `ignore`** (which layers stay dense) | **ModelOpt** | same `config.json` |
+| Backend = `trtllm` | **vLLM-Omni** (user) | engine args |
+| **SAGE on/off** (FP8 attn, runtime, no calib) | **vLLM-Omni** (user) | engine args |
+| **target_sparsity / D** (pick operating point) | **vLLM-Omni** (user) | engine args → `factor = a·exp(b·D)` |
+| **disabled_until_timestep** gate | **vLLM-Omni** (denoise loop) | runtime |
+| L (seqlen), `factor` once/gen, CUDA-graph keys | **vLLM-Omni** | runtime |
+| Fallback (SM<100 / head_dim≠128 / GQA) | **vLLM-Omni** | runtime |
+
+> **ModelOpt = offline, baked into the checkpoint** (weights + the `a,b` curve + ignore list). **vLLM-Omni = runtime**: reads that curve, turns SAGE on/off, picks D, computes the factor, gates by timestep, and calls the kernel. vLLM-Omni never re-fits `a,b`; ModelOpt never runs at inference.
+
+### 1. ModelOpt output — checkpoint `config.json` (vLLM-Omni only reads this)
+
+```json
+"sparse_attention_config": {
+  "config_groups": {
+    "group_0": {
+      "method": "flash_skip_softmax",
+      "threshold_scale_factor": {"formula": "a*exp(b*target_sparsity)", "a": 1000.0, "b": 5.0},
+      "ignore": ["blocks.0.attn1"]
+    }
+  }
+}
+```
+
+### 2. vLLM-Omni user config
 
 ```yaml
 attention_backend: trtllm          # FlashInfer trtllm-gen path
-sage: true                         # FP8-SAGE attention, block (1,4,0,1)
-skip_softmax:                      # optional
-  target_sparsity: 0.5             # or fidelity D → factor
-  disabled_until_timestep: 0.6     # normalized [0,1]
+sage: true                         # FP8-SAGE attention (runtime, no calibration)
+skip_softmax:                      # optional; needs the ModelOpt curve above
+  target_sparsity: 0.5             # or fidelity D
+  disabled_until_timestep: 0.6     # normalized [0,1]; early steps stay dense
 ```
-
-**Config dataclasses**
 
 ```python
 @dataclass
 class SkipSoftmaxConfig:
-    target_sparsity: float | None = None    # → factor from calibration
-    factor: float | None = None             # manual override (skip calib)
+    target_sparsity: float | None = None    # user picks; -> factor via a,b from config.json
+    factor: float | None = None             # manual override (bypass calibration)
     disabled_until_timestep: float = 0.0
 
 @dataclass
 class TrtllmAttnConfig:
-    sage: bool = True
-    sage_block: tuple = (1, 4, 0, 1)
+    sage: bool = True                        # FP8-SAGE
     skip_softmax: SkipSoftmaxConfig | None = None
-# AttentionMetadata += skip_softmax_factor: float | None
 ```
 
-**Kernel call** (FlashInfer)
+### 3. vLLM-Omni runtime → kernel
 
 ```python
+# once per generation (L fixed for a DiT):
+L = tokens_from(H, W, frames, vae_downsample, patch)
+a, b   = config_json["sparse_attention_config"][group]["threshold_scale_factor"]  # ModelOpt
+factor = a * math.exp(b * target_sparsity)        # vLLM-Omni; None -> no skip
+# per denoise step: apply skip only when timestep >= disabled_until_timestep
+
 flashinfer.prefill.trtllm_ragged_attention_deepseek(
+    q_fp8, k_fp8, v_fp8, workspace, seq_lens, max_q_len, max_kv_len,
+    bmm1_scale = sq * sk * sm_scale,   # float32 tensor = SAGE per-block scales (scalar if plain FP8)
+    bmm2_scale = sv,                   # float32 tensor
     ...,
-    skip_softmax_threshold_scale_factor = factor,   # threshold = factor / seqlen
-    sage_attn_sfs = (q_sf, k_sf, None, v_sf),
-    num_elts_per_sage_attn_blk = (1, 4, 0, 1),      # (0,0,0,0) = SAGE off
-    bmm1_scale = scale_q * scale_k * sm_scale,
-    bmm2_scale = scale_v,
-    backend = "trtllm-gen",
+    is_causal = False,                 # DiT is bidirectional
+    skip_softmax_threshold_scale_factor = factor,   # threshold = factor / L; omit -> dense
 )
 ```
 
-**Calibration source:** per-model `config.json → sparse_attention_config` (`factor = a·exp(b·target_sparsity)`, per `config_group`, `ignore` layers kept dense).
-
-**Fallback:** SM < 100 / head_dim ≠ 128 / GQA / no calibration → flash-attn.
+**Fallback (vLLM-Omni):** SM < 100 / head_dim ≠ 128 / GQA / no calibration & no manual factor → flash-attn.
 
 ---
 
