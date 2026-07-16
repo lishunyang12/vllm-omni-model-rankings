@@ -141,9 +141,28 @@ ModelOpt calibration → config.json threshold_scale_factor.prefill.{a,b}
    → kernel skip_softmax_threshold_scale_factor (threshold = factor / seqlen)
 ```
 
-> Proof-run `a,b` (b≈65) come from a tiny calibration and are not production-usable — a
-> real curve needs more prompts + target resolution/frames/steps + the full threshold
-> sweep. A14B 720p production calibration was launched; results appended below when done.
+### Wan 2.2 **T2V-A14B** production calibration (deck page-8 model, B300)
+
+Official script, **720p / 33 frames / 8 OpenVid prompts / 12 denoise steps**, target_sparsity
+0.65. A14B is a two-stage MoE DiT (high-noise `transformer` + low-noise `transformer_2`,
+40 blocks each) — the script calibrates each stage and writes its **own** curve. Both
+exported cleanly (~28 GB/stage) with `sparse_attention_config` in `config.json`:
+
+```
+stage                        a            b       enabled   fit
+──────────────────────────────────────────────────────────────────────
+transformer   (high-noise)   5.383e-09    39.70   36/40     R² = 0.894
+transformer_2 (low-noise)    1.211e-15    53.77   36/40     obs. sparsity 0.22–0.87
+```
+
+Both `config.json` files verified backend-readable (exact `threshold_scale_factor.prefill.{a,b}`
+format; `sparse_algo=softmax_skip`, `targets=["WanAttention"]`, producer modelopt 0.44.0).
+Per-stage curves differ as expected — the two denoise regimes have different attention
+sparsity structure. Checkpoint: `/home/zjy/code/lsy/wan22-a14b-skip-calibrated/`.
+
+> The TI2V-5B run above (b≈65) was a tiny proof of the loop. The A14B curves are the
+> deck's actual page-8 model. For a final production curve, increase prompts/steps — the
+> fit quality (R², observed-sparsity span) scales with calibration data.
 
 ---
 
@@ -171,6 +190,8 @@ ModelOpt calibration → config.json threshold_scale_factor.prefill.{a,b}
 - ✅ Backend (BF16 / FP8 / per-block SAGE / Skip / compose) — implemented + B300-validated.
 - ✅ Calibration → config.json → backend read — end-to-end verified.
 - ✅ Timestep plumbing (wan2_2 family + hunyuan_image3).
-- ⏳ A14B production calibration — running.
-- ⏳ E2E page-8 speedup — needs the full vLLM-Omni generation run on a calibrated checkpoint
-  (`bench_trtllm_gen_sage_skip.py`); cannot be shown by microbenchmarks.
+- ✅ A14B (deck page-8 model) calibration — both stages fitted + exported + config verified
+  (transformer a=5.383e-09 b=39.70; transformer_2 a=1.211e-15 b=53.77).
+- ⏳ E2E page-8 speedup (525s→486s→461s) — needs the full vLLM-Omni generation run on the
+  calibrated A14B checkpoint (`bench_trtllm_gen_sage_skip.py`); cannot be shown by
+  microbenchmarks (random tensors have no skippable structure). Checkpoint is now ready.
