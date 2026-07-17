@@ -1,12 +1,12 @@
 {
-  "generated": "2026-07-17 08:02 UTC",
+  "generated": "2026-07-17 13:19 UTC",
   "source": "https://raw.githubusercontent.com/vllm-project/vllm-omni/main/docs/models/supported_models.md",
   "models": [
     {
       "id": "stabilityai/stable-diffusion-xl-base-1.0",
       "downloads_30d": 1425161,
       "downloads_all": 118711916,
-      "likes": 7944,
+      "likes": 7947,
       "pipeline_tag": "text-to-image",
       "created": "2023-07-25",
       "released": "2023-07-25",
@@ -16,7 +16,7 @@
       "id": "black-forest-labs/FLUX.1-dev",
       "downloads_30d": 609750,
       "downloads_all": 32129960,
-      "likes": 13662,
+      "likes": 13669,
       "pipeline_tag": "text-to-image",
       "created": "2024-07-31",
       "released": "2024-07-31",
@@ -26,7 +26,7 @@
       "id": "black-forest-labs/FLUX.1-schnell",
       "downloads_30d": 245198,
       "downloads_all": 21709069,
-      "likes": 5363,
+      "likes": 5364,
       "pipeline_tag": "text-to-image",
       "created": "2024-07-31",
       "released": "2024-07-31",
@@ -34,9 +34,9 @@
     },
     {
       "id": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
-      "downloads_30d": 2068873,
-      "downloads_all": 10831833,
-      "likes": 443,
+      "downloads_30d": 2150820,
+      "downloads_all": 10990845,
+      "likes": 444,
       "pipeline_tag": null,
       "created": "2026-01-21",
       "released": "2026-01-21",
@@ -44,9 +44,9 @@
     },
     {
       "id": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
-      "downloads_30d": 2357234,
-      "downloads_all": 9597054,
-      "likes": 1716,
+      "downloads_30d": 2432960,
+      "downloads_all": 9761461,
+      "likes": 1720,
       "pipeline_tag": "text-to-speech",
       "created": "2026-01-21",
       "released": "2026-01-21",
@@ -74,8 +74,8 @@
     },
     {
       "id": "Lightricks/LTX-2",
-      "downloads_30d": 431193,
-      "downloads_all": 7749886,
+      "downloads_30d": 464095,
+      "downloads_all": 7796052,
       "likes": 1763,
       "pipeline_tag": "image-to-video",
       "created": "2026-01-03",
@@ -86,7 +86,7 @@
       "id": "Tongyi-MAI/Z-Image-Turbo",
       "downloads_30d": 1075658,
       "downloads_all": 7123284,
-      "likes": 4996,
+      "likes": 4999,
       "pipeline_tag": "text-to-image",
       "created": "2025-11-25",
       "released": "2025-11-25",
@@ -94,9 +94,9 @@
     },
     {
       "id": "k2-fsa/OmniVoice",
-      "downloads_30d": 901315,
-      "downloads_all": 6133823,
-      "likes": 1176,
+      "downloads_30d": 893572,
+      "downloads_all": 6165338,
+      "likes": 1177,
       "pipeline_tag": "text-to-speech",
       "created": "2026-03-30",
       "released": "2026-03-30",
@@ -134,9 +134,9 @@
     },
     {
       "id": "Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign",
-      "downloads_30d": 690117,
-      "downloads_all": 3453184,
-      "likes": 373,
+      "downloads_30d": 710028,
+      "downloads_all": 3494218,
+      "likes": 374,
       "pipeline_tag": "text-to-speech",
       "created": "2026-01-21",
       "released": "2026-01-21",
@@ -204,12 +204,22 @@
     },
     {
       "id": "black-forest-labs/FLUX.2-klein-4B",
-      "downloads_30d": 368068,
-      "downloads_all": 1892472,
-      "likes": 801,
+      "downloads_30d": 382531,
+      "downloads_all": 1916966,
+      "likes": 802,
       "pipeline_tag": "image-to-image",
       "created": "2026-01-14",
       "released": "2026-01-15",
+      "status": "ok"
+    },
+    {
+      "id": "openbmb/VoxCPM2",
+      "downloads_30d": 989206,
+      "downloads_all": 1677117,
+      "likes": 1481,
+      "pipeline_tag": "text-to-speech",
+      "created": "2026-04-03",
+      "released": "2026-04-03",
       "status": "ok"
     },
     {
@@ -223,16 +233,6 @@
       "status": "ok"
     },
     {
-      "id": "openbmb/VoxCPM2",
-      "downloads_30d": 942047,
-      "downloads_all": 1602325,
-      "likes": 1481,
-      "pipeline_tag": "text-to-speech",
-      "created": "2026-04-03",
-      "released": "2026-04-03",
-      "status": "ok"
-    },
-    {
       "id": "Wan-AI/Wan2.2-I2V-A14B-Diffusers",
       "downloads_30d": 122790,
       "downloads_all": 1458116,
@@ -243,6 +243,16 @@
       "status": "ok"
     },
     {
+      "id": "Qwen/Qwen-Image-Edit-2511",
+      "downloads_30d": 208974,
+      "downloads_all": 1234918,
+      "likes": 1138,
+      "pipeline_tag": "image-to-image",
+      "created": "2025-12-17",
+      "released": "2025-12-17",
+      "status": "ok"
+    },
+    {
       "id": "HiDream-ai/HiDream-I1-Full",
       "downloads_30d": 11149,
       "downloads_all": 1228162,
@@ -250,16 +260,6 @@
       "pipeline_tag": "text-to-image",
       "created": "2025-04-06",
       "released": "2025-04-06",
-      "status": "ok"
-    },
-    {
-      "id": "Qwen/Qwen-Image-Edit-2511",
-      "downloads_30d": 204851,
-      "downloads_all": 1225214,
-      "likes": 1136,
-      "pipeline_tag": "image-to-image",
-      "created": "2025-12-17",
-      "released": "2025-12-17",
       "status": "ok"
     },
     {
@@ -274,8 +274,8 @@
     },
     {
       "id": "openbmb/MiniCPM-o-4_5",
-      "downloads_30d": 468739,
-      "downloads_all": 1026660,
+      "downloads_30d": 476407,
+      "downloads_all": 1056978,
       "likes": 1431,
       "pipeline_tag": "any-to-any",
       "created": "2026-02-03",
@@ -284,9 +284,9 @@
     },
     {
       "id": "black-forest-labs/FLUX.2-klein-9B",
-      "downloads_30d": 309896,
-      "downloads_all": 931518,
-      "likes": 1067,
+      "downloads_30d": 320168,
+      "downloads_all": 946582,
+      "likes": 1069,
       "pipeline_tag": "image-to-image",
       "created": "2026-01-14",
       "released": "2026-01-14",
@@ -304,8 +304,8 @@
     },
     {
       "id": "fishaudio/s2-pro",
-      "downloads_30d": 300166,
-      "downloads_all": 762007,
+      "downloads_30d": 268054,
+      "downloads_all": 764255,
       "likes": 1095,
       "pipeline_tag": "text-to-speech",
       "created": "2026-03-09",
@@ -334,9 +334,9 @@
     },
     {
       "id": "Qwen/Qwen-Image-2512",
-      "downloads_30d": 51103,
-      "downloads_all": 600666,
-      "likes": 905,
+      "downloads_30d": 48243,
+      "downloads_all": 603180,
+      "likes": 906,
       "pipeline_tag": "text-to-image",
       "created": "2025-12-30",
       "released": "2025-12-30",
@@ -344,18 +344,28 @@
     },
     {
       "id": "FunAudioLLM/Fun-CosyVoice3-0.5B-2512",
-      "downloads_30d": 24218,
-      "downloads_all": 513076,
-      "likes": 587,
+      "downloads_30d": 24951,
+      "downloads_all": 514539,
+      "likes": 589,
       "pipeline_tag": "text-to-speech",
       "created": "2025-12-11",
       "released": "2025-12-11",
       "status": "ok"
     },
     {
+      "id": "bosonai/higgs-audio-v3-tts-4b",
+      "downloads_30d": 290473,
+      "downloads_all": 358185,
+      "likes": 646,
+      "pipeline_tag": "text-to-speech",
+      "created": "2026-06-04",
+      "released": "2026-06-04",
+      "status": "ok"
+    },
+    {
       "id": "OpenMOSS-Team/MOSS-TTS-Nano",
-      "downloads_30d": 49922,
-      "downloads_all": 352434,
+      "downloads_30d": 53667,
+      "downloads_all": 356809,
       "likes": 229,
       "pipeline_tag": "text-to-speech",
       "created": "2026-04-02",
@@ -364,28 +374,18 @@
     },
     {
       "id": "nvidia/Cosmos3-Nano",
-      "downloads_30d": 220518,
-      "downloads_all": 343548,
-      "likes": 298,
+      "downloads_30d": 223707,
+      "downloads_all": 356027,
+      "likes": 299,
       "pipeline_tag": null,
       "created": "2026-03-10",
       "released": "2026-06-01",
       "status": "ok"
     },
     {
-      "id": "bosonai/higgs-audio-v3-tts-4b",
-      "downloads_30d": 266199,
-      "downloads_all": 324246,
-      "likes": 646,
-      "pipeline_tag": "text-to-speech",
-      "created": "2026-06-04",
-      "released": "2026-06-04",
-      "status": "ok"
-    },
-    {
       "id": "meituan-longcat/LongCat-Image-Edit",
-      "downloads_30d": 22193,
-      "downloads_all": 312034,
+      "downloads_30d": 22366,
+      "downloads_all": 313056,
       "likes": 184,
       "pipeline_tag": "image-to-image",
       "created": "2025-12-05",
@@ -394,8 +394,8 @@
     },
     {
       "id": "Qwen/Qwen-Image-Layered",
-      "downloads_30d": 50905,
-      "downloads_all": 267126,
+      "downloads_30d": 51067,
+      "downloads_all": 269345,
       "likes": 1120,
       "pipeline_tag": "image-text-to-image",
       "created": "2025-12-17",
@@ -414,8 +414,8 @@
     },
     {
       "id": "meituan-longcat/LongCat-Image",
-      "downloads_30d": 15209,
-      "downloads_all": 234272,
+      "downloads_30d": 15285,
+      "downloads_all": 234951,
       "likes": 248,
       "pipeline_tag": "text-to-image",
       "created": "2025-12-04",
@@ -433,6 +433,16 @@
       "status": "ok"
     },
     {
+      "id": "krea/Krea-2-Turbo",
+      "downloads_30d": 199401,
+      "downloads_all": 199401,
+      "likes": 629,
+      "pipeline_tag": "text-to-image",
+      "created": "2026-06-18",
+      "released": "2026-06-18",
+      "status": "ok"
+    },
+    {
       "id": "XiaomiMiMo/MiMo-Audio-7B-Instruct",
       "downloads_30d": 12979,
       "downloads_all": 193123,
@@ -443,19 +453,9 @@
       "status": "ok"
     },
     {
-      "id": "krea/Krea-2-Turbo",
-      "downloads_30d": 191533,
-      "downloads_all": 191533,
-      "likes": 628,
-      "pipeline_tag": "text-to-image",
-      "created": "2026-06-18",
-      "released": "2026-06-18",
-      "status": "ok"
-    },
-    {
       "id": "OpenMOSS-Team/MOSS-TTS-Realtime",
-      "downloads_30d": 32069,
-      "downloads_all": 189045,
+      "downloads_30d": 32237,
+      "downloads_all": 189433,
       "likes": 92,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-09",
@@ -473,6 +473,16 @@
       "status": "ok"
     },
     {
+      "id": "krea/Krea-2-Raw",
+      "downloads_30d": 150676,
+      "downloads_all": 150676,
+      "likes": 342,
+      "pipeline_tag": "text-to-image",
+      "created": "2026-06-18",
+      "released": "2026-06-18",
+      "status": "ok"
+    },
+    {
       "id": "tencent/HunyuanImage-3.0-Instruct",
       "downloads_30d": 62137,
       "downloads_all": 146582,
@@ -483,20 +493,10 @@
       "status": "ok"
     },
     {
-      "id": "krea/Krea-2-Raw",
-      "downloads_30d": 140502,
-      "downloads_all": 140502,
-      "likes": 342,
-      "pipeline_tag": "text-to-image",
-      "created": "2026-06-18",
-      "released": "2026-06-18",
-      "status": "ok"
-    },
-    {
       "id": "nvidia/Cosmos3-Super",
-      "downloads_30d": 66349,
-      "downloads_all": 136118,
-      "likes": 203,
+      "downloads_30d": 70751,
+      "downloads_all": 142920,
+      "likes": 204,
       "pipeline_tag": null,
       "created": "2026-03-10",
       "released": "2026-06-01",
@@ -504,8 +504,8 @@
     },
     {
       "id": "baidu/ERNIE-Image",
-      "downloads_30d": 77458,
-      "downloads_all": 132998,
+      "downloads_30d": 77014,
+      "downloads_all": 133137,
       "likes": 663,
       "pipeline_tag": "text-to-image",
       "created": "2026-04-07",
@@ -514,8 +514,8 @@
     },
     {
       "id": "nvidia/GR00T-N1.7-3B",
-      "downloads_30d": 38821,
-      "downloads_all": 123671,
+      "downloads_30d": 43095,
+      "downloads_all": 130233,
       "likes": 77,
       "pipeline_tag": "robotics",
       "created": "2026-02-25",
@@ -544,8 +544,8 @@
     },
     {
       "id": "zai-org/GLM-Image",
-      "downloads_30d": 23536,
-      "downloads_all": 91609,
+      "downloads_30d": 20047,
+      "downloads_all": 91850,
       "likes": 1089,
       "pipeline_tag": "text-to-image",
       "created": "2026-01-08",
@@ -554,8 +554,8 @@
     },
     {
       "id": "SenseNova/SenseNova-U1-8B-MoT",
-      "downloads_30d": 38330,
-      "downloads_all": 89347,
+      "downloads_30d": 37952,
+      "downloads_all": 90864,
       "likes": 287,
       "pipeline_tag": "any-to-any",
       "created": "2026-04-22",
@@ -574,8 +574,8 @@
     },
     {
       "id": "inclusionAI/Ming-omni-tts-0.5B",
-      "downloads_30d": 10252,
-      "downloads_all": 50342,
+      "downloads_30d": 10425,
+      "downloads_all": 50742,
       "likes": 38,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-11",
@@ -584,8 +584,8 @@
     },
     {
       "id": "OpenMOSS-Team/MOSS-VoiceGenerator",
-      "downloads_30d": 6657,
-      "downloads_all": 44465,
+      "downloads_30d": 6631,
+      "downloads_all": 44618,
       "likes": 44,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-08",
@@ -604,8 +604,8 @@
     },
     {
       "id": "snu-aidas/Dynin-Omni",
-      "downloads_30d": 2929,
-      "downloads_all": 32845,
+      "downloads_30d": 2707,
+      "downloads_all": 32847,
       "likes": 19,
       "pipeline_tag": "any-to-any",
       "created": "2026-02-21",
@@ -624,8 +624,8 @@
     },
     {
       "id": "baidu/ERNIE-Image-Turbo",
-      "downloads_30d": 4262,
-      "downloads_all": 28686,
+      "downloads_30d": 4056,
+      "downloads_all": 28783,
       "likes": 400,
       "pipeline_tag": "text-to-image",
       "created": "2026-04-02",
@@ -634,8 +634,8 @@
     },
     {
       "id": "stepfun-ai/NextStep-1.1",
-      "downloads_30d": 3739,
-      "downloads_all": 28388,
+      "downloads_30d": 3587,
+      "downloads_all": 28469,
       "likes": 28,
       "pipeline_tag": "text-to-image",
       "created": "2025-12-23",
@@ -644,8 +644,8 @@
     },
     {
       "id": "tencent/Covo-Audio-Chat",
-      "downloads_30d": 5481,
-      "downloads_all": 25174,
+      "downloads_30d": 5063,
+      "downloads_all": 25180,
       "likes": 99,
       "pipeline_tag": "audio-to-audio",
       "created": "2026-03-16",
@@ -654,8 +654,8 @@
     },
     {
       "id": "rootonchair/LTX-2-19b-distilled",
-      "downloads_30d": 905,
-      "downloads_all": 20814,
+      "downloads_30d": 924,
+      "downloads_all": 20844,
       "likes": 1,
       "pipeline_tag": "image-to-video",
       "created": "2026-01-11",
@@ -664,8 +664,8 @@
     },
     {
       "id": "BestWishYsh/Helios-Distilled",
-      "downloads_30d": 1823,
-      "downloads_all": 20144,
+      "downloads_30d": 1807,
+      "downloads_all": 20256,
       "likes": 49,
       "pipeline_tag": "text-to-video",
       "created": "2026-02-23",
@@ -674,8 +674,8 @@
     },
     {
       "id": "dg845/LTX-2.3-Diffusers",
-      "downloads_30d": 2683,
-      "downloads_all": 13986,
+      "downloads_30d": 2631,
+      "downloads_all": 14048,
       "likes": 7,
       "pipeline_tag": null,
       "created": "2026-03-10",
@@ -694,12 +694,22 @@
     },
     {
       "id": "BestWishYsh/Helios-Base",
-      "downloads_30d": 2441,
-      "downloads_all": 9309,
+      "downloads_30d": 2370,
+      "downloads_all": 9331,
       "likes": 33,
       "pipeline_tag": "text-to-video",
       "created": "2026-02-23",
       "released": "2026-02-23",
+      "status": "ok"
+    },
+    {
+      "id": "GEAR-Dreams/DreamZero-DROID",
+      "downloads_30d": 3462,
+      "downloads_all": 7922,
+      "likes": 31,
+      "pipeline_tag": "robotics",
+      "created": "2026-02-04",
+      "released": "2026-02-04",
       "status": "ok"
     },
     {
@@ -713,19 +723,9 @@
       "status": "ok"
     },
     {
-      "id": "GEAR-Dreams/DreamZero-DROID",
-      "downloads_30d": 3483,
-      "downloads_all": 7740,
-      "likes": 30,
-      "pipeline_tag": "robotics",
-      "created": "2026-02-04",
-      "released": "2026-02-04",
-      "status": "ok"
-    },
-    {
       "id": "XiaomiMiMo/MiMo-V2.5-ASR",
-      "downloads_30d": 3039,
-      "downloads_all": 6583,
+      "downloads_30d": 3043,
+      "downloads_all": 6599,
       "likes": 102,
       "pipeline_tag": "automatic-speech-recognition",
       "created": "2026-04-23",
@@ -734,8 +734,8 @@
     },
     {
       "id": "zai-org/GLM-TTS",
-      "downloads_30d": 1009,
-      "downloads_all": 5969,
+      "downloads_30d": 1018,
+      "downloads_all": 5982,
       "likes": 344,
       "pipeline_tag": "text-to-speech",
       "created": "2025-12-10",
@@ -744,7 +744,7 @@
     },
     {
       "id": "Jonathan1909/Ming-flash-omni-2.0",
-      "downloads_30d": 747,
+      "downloads_30d": 718,
       "downloads_all": 5808,
       "likes": 1,
       "pipeline_tag": "any-to-any",
@@ -754,8 +754,8 @@
     },
     {
       "id": "Soul-AILab/SoulX-Singer",
-      "downloads_30d": 1442,
-      "downloads_all": 5368,
+      "downloads_30d": 1453,
+      "downloads_all": 5434,
       "likes": 165,
       "pipeline_tag": "text-to-speech",
       "created": "2026-02-06",
@@ -764,8 +764,8 @@
     },
     {
       "id": "bytedance-research/Lance",
-      "downloads_30d": 461,
-      "downloads_all": 4303,
+      "downloads_30d": 450,
+      "downloads_all": 4316,
       "likes": 1055,
       "pipeline_tag": "any-to-any",
       "created": "2026-05-15",
@@ -795,7 +795,7 @@
     {
       "id": "BestWishYsh/Helios-Mid",
       "downloads_30d": 86,
-      "downloads_all": 3126,
+      "downloads_all": 3130,
       "likes": 10,
       "pipeline_tag": "text-to-video",
       "created": "2026-02-23",
@@ -804,8 +804,8 @@
     },
     {
       "id": "InternRobotics/InternVLA-A1-3B",
-      "downloads_30d": 101,
-      "downloads_all": 1235,
+      "downloads_30d": 102,
+      "downloads_all": 1238,
       "likes": 40,
       "pipeline_tag": "robotics",
       "created": "2026-01-05",
@@ -814,8 +814,8 @@
     },
     {
       "id": "zhangj1an/AudioX",
-      "downloads_30d": 370,
-      "downloads_all": 599,
+      "downloads_30d": 373,
+      "downloads_all": 604,
       "likes": 0,
       "pipeline_tag": "text-to-audio",
       "created": "2026-04-06",
@@ -834,7 +834,7 @@
     },
     {
       "id": "SII-GAIR/daVinci-MagiHuman-Base-1080p",
-      "downloads_30d": 102,
+      "downloads_30d": 98,
       "downloads_all": 325,
       "likes": 4,
       "pipeline_tag": "image-to-video",
