@@ -36,8 +36,8 @@ train-clean-100          (audio + ASR       (target Qwen3-Omni    (tokenize,    
 | Answer length | median 45 tokens (p95 61) |
 | Task instruction | "Transcribe the audio into text." (+ paraphrases) |
 
-Distribution is shown in panel (a). Mix is aligned with the Qwen3-Omni report
-(arXiv 2509.17765): audio pretraining is ~90% ASR.
+Mix is aligned with the Qwen3-Omni report (arXiv 2509.17765): audio pretraining
+is ~90% ASR.
 
 ## Configuration
 
@@ -50,7 +50,8 @@ Distribution is shown in panel (a). Mix is aligned with the Qwen3-Omni report
 
 ## Results
 
-**Training convergence** — mean accepted length, per epoch:
+**Training convergence** (panel a) — mean accepted length rises to ~6.8 (train) over
+2196 steps; per-epoch validation:
 
 | Epoch | Accepted length (/7) | Accept rate | Val loss | Full-block acc |
 |---|---|---|---|---|
@@ -58,8 +59,13 @@ Distribution is shown in panel (a). Mix is aligned with the Qwen3-Omni report
 | 2 | 5.93 | 0.885 | 0.194 | 0.905 |
 | **3** | **6.19** | **0.907** | **0.178** | **0.922** |
 
-**Final per-position acceptance** (panel c): 95.3% → 87.9% across the 7-token block —
-barely decays. Confidence head pred-mean 0.955 (CE 0.181, TV 0.043).
+**Final per-position acceptance** (panel b) — acceptance of the draft's k-th token in
+the 7-token block: 95.3% → 87.9%, barely decays. Confidence head pred-mean 0.955
+(CE 0.181, TV 0.043).
+
+**Key speculative-decoding metrics** (panel c): the draft proposes a **block of 7**
+tokens per verifier step; **accept_len = 6.19/7** are accepted on average
+(**accept_rate 90.7%** of drafted tokens; **full-block 92.2%** of blocks accept all 7).
 
 ## Notes
 
