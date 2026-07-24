@@ -6,6 +6,16 @@ the **audio (ASR)** input modality, trained in the
 servable in vLLM, no conversion). This is a self-contained profile of the run — dataset,
 pipeline, and training metrics.
 
+> **⚠️ These are training / validation metrics (teacher-forced), not deployed speedup.**
+> Measured end-to-end in vLLM speculative serving, this head currently accepts
+> ~1.1 tokens/step (accept_rate ~1.4%, no speedup). The gap is a **vLLM bug, not the
+> training**: the DFlash/DSpark spec-decode proposer does not thread MRoPE positions, so
+> the draft (trained with Qwen3-Omni's 3D MRoPE) is fed 1D positions at serve time and
+> its rotary embedding is wrong. This affects *all* MRoPE targets (Qwen3-Omni, Qwen-VL)
+> and both the image and audio heads identically; text-only targets (e.g. GLM) are
+> unaffected. Report these numbers as validation only until MRoPE support lands in the
+> proposer. (Consistent with RedHat's GLM DSpark card noting "inference support is landing".)
+
 ![pipeline](dspark_audio_pipeline.png)
 
 ![convergence](dspark_audio_convergence.png)
@@ -57,7 +67,7 @@ is ~90% ASR.
 **Training convergence** (convergence figure) — mean accepted length rises to ~6.8 (train) over
 2196 steps; per-epoch validation:
 
-| Epoch | Accepted length (/7) | Accept rate | Val loss | Full-block acc |
+| Epoch | Accepted length (/8) | Accept rate | Val loss | Full-block acc |
 |---|---|---|---|---|
 | 1 | 5.45 | 0.838 | 0.254 | 0.864 |
 | 2 | 5.93 | 0.885 | 0.194 | 0.905 |
@@ -68,7 +78,7 @@ the 7-token block: 95.3% → 87.9%, barely decays. Confidence head pred-mean 0.9
 (CE 0.181, TV 0.043).
 
 **Key speculative-decoding metrics**: the draft proposes a **block of 7**
-tokens per verifier step; **accept_len = 6.19/7** are accepted on average
+tokens per verifier step; **accept_len = 6.19/8** are accepted on average
 (**accept_rate 90.7%** of drafted tokens; **full-block 92.2%** of blocks accept all 7).
 
 ## Notes

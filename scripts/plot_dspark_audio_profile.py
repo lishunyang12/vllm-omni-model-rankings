@@ -82,8 +82,9 @@ def fig_convergence(curve, outdir):
     ax.annotate(rf"$\tau={val[-1]:.2f}$", (len(al) - 1, val[-1]),
                 textcoords="offset points", xytext=(-4, 6), ha="right",
                 color=C, fontsize=9, fontweight="bold")
-    ax.set_ylim(0.8, 7.1); ax.set_xlabel("Training step")
-    ax.set_ylabel(r"Accepted length $\tau$ ($\leq 7$)")
+    ax.set_ylim(0.8, 8.1); ax.set_xlabel("Training step")
+    ax.set_ylabel(r"Accepted length $\tau$ ($\leq 8$)")
+    ax.set_title("Validation (teacher-forced)", fontsize=9, color=MUTED, pad=3)
     ax.legend(frameon=False, fontsize=8, loc="lower right", labelcolor=INK)
     fig.tight_layout()
     _save(fig, outdir, "dspark_audio_convergence")
@@ -101,7 +102,8 @@ def fig_perposition(outdir):
     ax.set_ylim(0.82, 1.0); ax.set_xticks(range(BLOCK))
     ax.yaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
     ax.set_xlabel("Draft position in block")
-    ax.set_ylabel("Top-1 acceptance")
+    ax.set_ylabel("Top-1 agreement")
+    ax.set_title("Validation (teacher-forced)", fontsize=9, color=MUTED, pad=3)
     fig.tight_layout()
     _save(fig, outdir, "dspark_audio_perposition")
 
