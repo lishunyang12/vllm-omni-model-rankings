@@ -6,9 +6,13 @@ the **audio (ASR)** input modality, trained in the
 servable in vLLM, no conversion). This is a self-contained profile of the run — dataset,
 pipeline, and training metrics.
 
-![profile](dspark_audio_profile.png)
+![pipeline](dspark_audio_pipeline.png)
 
-Figure: `dspark_audio_profile.pdf` (vector) / `.png`. Regenerate with
+![convergence](dspark_audio_convergence.png)
+![per-position](dspark_audio_perposition.png)
+
+Figures (one per file, PDF vector + PNG): `dspark_audio_pipeline`,
+`dspark_audio_convergence`, `dspark_audio_perposition`. Regenerate all with
 `python scripts/plot_dspark_audio_profile.py`.
 
 ## Pipeline (built for this run)
@@ -50,7 +54,7 @@ is ~90% ASR.
 
 ## Results
 
-**Training convergence** (panel a) — mean accepted length rises to ~6.8 (train) over
+**Training convergence** (convergence figure) — mean accepted length rises to ~6.8 (train) over
 2196 steps; per-epoch validation:
 
 | Epoch | Accepted length (/7) | Accept rate | Val loss | Full-block acc |
@@ -59,11 +63,11 @@ is ~90% ASR.
 | 2 | 5.93 | 0.885 | 0.194 | 0.905 |
 | **3** | **6.19** | **0.907** | **0.178** | **0.922** |
 
-**Final per-position acceptance** (panel b) — acceptance of the draft's k-th token in
+**Final per-position acceptance** (per-position figure) — acceptance of the draft's k-th token in
 the 7-token block: 95.3% → 87.9%, barely decays. Confidence head pred-mean 0.955
 (CE 0.181, TV 0.043).
 
-**Key speculative-decoding metrics** (panel c): the draft proposes a **block of 7**
+**Key speculative-decoding metrics**: the draft proposes a **block of 7**
 tokens per verifier step; **accept_len = 6.19/7** are accepted on average
 (**accept_rate 90.7%** of drafted tokens; **full-block 92.2%** of blocks accept all 7).
 
