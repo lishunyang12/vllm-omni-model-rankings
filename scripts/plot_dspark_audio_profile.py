@@ -79,9 +79,10 @@ def fig_convergence(curve, outdir):
     for e, v in enumerate(val, start=1):
         ax.plot(e * spe - 1, v, marker="o", ms=5, mfc="white", mec=C, mew=1.3,
                 zorder=5, label="val" if e == 1 else None)
-    ax.annotate(rf"$\tau={val[-1]:.2f}$", (len(al) - 1, val[-1]),
-                textcoords="offset points", xytext=(-4, 6), ha="right",
-                color=C, fontsize=9, fontweight="bold")
+    ax.annotate(rf"val $\tau={val[-1]:.2f}$", (len(al) - 1, val[-1]),
+                textcoords="offset points", xytext=(-14, -20), ha="right",
+                color=C, fontsize=9, fontweight="bold",
+                arrowprops=dict(arrowstyle="-", color=C, lw=0.6))
     ax.set_ylim(0.8, 8.1); ax.set_xlabel("Training step")
     ax.set_ylabel(r"Accepted length $\tau$ ($\leq 8$)")
     ax.set_title("Validation (teacher-forced)", fontsize=9, color=MUTED, pad=3)
@@ -106,6 +107,29 @@ def fig_perposition(outdir):
     ax.set_title("Validation (teacher-forced)", fontsize=9, color=MUTED, pad=3)
     fig.tight_layout()
     _save(fig, outdir, "dspark_audio_perposition")
+
+
+def fig_dataset(outdir, dist_path):
+    d = json.load(open(dist_path))
+    al = np.array(d["audio_len"]); an = np.array(d["answer_len"]); n = d["n"]
+    fig, (axa, axb) = plt.subplots(1, 2, figsize=(6.6, 2.6))
+    fig.suptitle(f"Dataset: {n:,} LibriSpeech train-clean-100 utterances (ASR)",
+                 fontsize=10, fontweight="bold", color=INK, y=1.02)
+    for ax, arr, xlab, title, med in [
+        (axa, al, "Audio length (tokens)", "Input audio", int(np.median(al))),
+        (axb, an, "Answer length (tokens)", "Output transcript", int(np.median(an))),
+    ]:
+        _style(ax)
+        ax.hist(arr, bins=40, color=C2, edgecolor=C, linewidth=0.4)
+        ax.axvline(med, color=C, lw=1.2, ls="--")
+        ax.annotate(f"median {med}", (med, ax.get_ylim()[1] * 0.9),
+                    xytext=(5, 0), textcoords="offset points", color=C, fontsize=8)
+        ax.set_xlabel(xlab); ax.set_ylabel("Utterances")
+        ax.set_title(title, fontsize=9.5, color=INK, pad=3)
+        ax.yaxis.set_major_formatter(
+            lambda v, _: f"{v/1000:.0f}k" if v >= 1000 else f"{v:.0f}")
+    fig.tight_layout()
+    _save(fig, outdir, "dspark_audio_dataset")
 
 
 def fig_pipeline(outdir):
@@ -141,6 +165,9 @@ def main():
     fig_convergence(curve, a.outdir)
     fig_perposition(a.outdir)
     fig_pipeline(a.outdir)
+    dist = os.path.join(os.path.dirname(__file__), "dspark_audio_dataset_dist.json")
+    if os.path.exists(dist):
+        fig_dataset(a.outdir, dist)
 
 
 if __name__ == "__main__":

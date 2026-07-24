@@ -22,7 +22,7 @@ pipeline, and training metrics.
 ![per-position](dspark_audio_perposition.png)
 
 Figures (one per file, PDF vector + PNG): `dspark_audio_pipeline`,
-`dspark_audio_convergence`, `dspark_audio_perposition`. Regenerate all with
+`dspark_audio_dataset`, `dspark_audio_convergence`, `dspark_audio_perposition`. Regenerate all with
 `python scripts/plot_dspark_audio_profile.py`.
 
 ## Pipeline (built for this run)
@@ -41,6 +41,8 @@ train-clean-100          (audio + ASR       (target Qwen3-Omni    (tokenize,    
   zero disk. Audio spans are expanded by the real forward pass (not the offline placeholder).
 
 ## Dataset
+
+![dataset](dspark_audio_dataset.png)
 
 | | |
 |---|---|
